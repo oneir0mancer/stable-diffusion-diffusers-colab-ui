@@ -4,4 +4,12 @@
 
 Since Google Colab now profibits running stable diffusion WebUI, this repository aims to emulate WebUI using just Colab and it's UI widgets, without running a web server. 
 
-There are some major problems with supporting Automatic1111 format models, textual invertions, LoRAs, etc. Will see if it's something that can be fixed.
+### Plans:
+ - [X] UI based on IPython Widgets
+ - [X] Load models from huggingface
+ - [X] Index of popular huggingface models
+ - [X] Change VAE and sampler
+ - [X] Load textual inversions
+ - [ ] Load LoRAs
+ - [ ] Load models in Automatic1111 format
+ - [ ] Img2Img

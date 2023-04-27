@@ -23,7 +23,7 @@ class DiffusionPipelineUI:
         prompts = HBox([self.positive_prompt, self.negative_prompt])
         size_box = HBox([self.width_field, self.height_field])
         batch_box = HBox([self.batch_field])
-        display(HBox([l1, l2], prompts, size_box, self.steps_field, self.cfg_field, self.seed_field, batch_box)
+        display(HBox([l1, l2]), prompts, size_box, self.steps_field, self.cfg_field, self.seed_field, batch_box)
         
     def generate(self, pipe, generator = None):
         """Generate images given DiffusionPipeline, torch.GEnerator, and settings set in UI."""

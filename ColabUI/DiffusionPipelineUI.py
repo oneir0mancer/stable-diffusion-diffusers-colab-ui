@@ -1,4 +1,5 @@
 import torch
+from .BaseUI import BaseUI
 
 class DiffusionPipelineUI(BaseUI): 
     def generate(self, pipe, generator = None):

@@ -1,4 +1,5 @@
 import torch
+from .BaseUI import BaseUI
 
 class KandinskyUI(BaseUI): 
     def generate(self, pipe, sampler="p_sampler"):

@@ -12,9 +12,11 @@ Since Google Colab now profibits running stable diffusion WebUI, this repository
  - [X] Index of popular huggingface models
  - [X] Change VAE and sampler
  - [X] Load textual inversions
+ - [x] Load models in Automatic1111 format
  - [ ] Load LoRAs
- - [ ] Load models in Automatic1111 format
  - [ ] Img2Img
+ - [ ] Image mixing
+ - [ ] Inpainting
 
 ## Kandinsky
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/oneir0mancer/stable-diffusion-diffusers-colab-ui/blob/main/sd_kandinsky_colab_ui.ipynb)

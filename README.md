@@ -12,7 +12,7 @@ Since Google Colab now profibits running stable diffusion WebUI, this repository
  - [X] Index of popular huggingface models
  - [X] Change VAE and sampler
  - [X] Load textual inversions
- - [x] Load models in Automatic1111 format
+ - [x] Load models in Automatic1111 (ckpt/safetensors) format
  - [ ] Load LoRAs
  - [ ] Img2Img
  - [ ] Image mixing

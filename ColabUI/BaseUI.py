@@ -1,5 +1,6 @@
 from IPython.display import display
 from ipywidgets import Textarea, IntText, IntSlider, FloatSlider, HBox, Layout, Label
+from PIL.PngImagePlugin import PngInfo
 import ipywidgets as widgets
 import io
 
@@ -41,3 +42,9 @@ class BaseUI:
             )
             wgts.append(wgt)
         display(HBox(wgts))
+        
+    def save_with_metadata(self, image, path):
+        metadata = PngInfo()
+        s = f"\nPrompt: {self.positive_prompt.value}\nNegative: {self.negative_prompt.value}\n"
+        metadata.add_text("Data", s)
+        image.save(path, pnginfo=metadata)

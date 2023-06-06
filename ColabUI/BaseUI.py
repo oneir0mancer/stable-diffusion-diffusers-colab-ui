@@ -43,8 +43,5 @@ class BaseUI:
             wgts.append(wgt)
         display(HBox(wgts))
         
-    def save_with_metadata(self, image, path):
-        metadata = PngInfo()
-        s = f"\nPrompt: {self.positive_prompt.value}\nNegative: {self.negative_prompt.value}\n"
-        metadata.add_text("Data", s)
-        image.save(path, pnginfo=metadata)
+    def get_metadata_string(self):
+        s = f"\nPrompt: {self.positive_prompt.value}\nNegative: {self.negative_prompt.value}\n CGF: {self.cfg_field.value} Steps {self.steps_field.value}\n"

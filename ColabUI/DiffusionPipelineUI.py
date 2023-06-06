@@ -5,9 +5,9 @@ class DiffusionPipelineUI(BaseUI):
     def generate(self, pipe, generator = None):
         """Generate images given DiffusionPipeline, torch.GEnerator, and settings set in UI."""
         if self.seed_field.value >= 0: 
-            generator = torch.manual_seed(self.seed_field.value)
+            generator = torch.cuda.manual_seed(self.seed_field.value)
         else:
-            generator = torch.Generator("cuda")
+            generator = torch.cuda.manual_seed(generator.seed())
 
         results = pipe([self.positive_prompt.value]*self.batch_field.value, 
                        negative_prompt=[self.negative_prompt.value]*self.batch_field.value, 

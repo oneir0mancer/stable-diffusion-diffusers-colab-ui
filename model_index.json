@@ -5,8 +5,12 @@
 	"Dreamlike Photoreal 2.0" : { "id" : "dreamlike-art/dreamlike-photoreal-2.0" },
 	"Openjourney v4" : { "id" : "prompthero/openjourney-v4" },
 	"Counterfeit-V2.5" : { "id" : "gsdf/Counterfeit-V2.5" },
+	"Pony Diffusion v4" : { "id" : "AstraliteHeart/pony-diffusion-v4" },
 	"Anything v3.0" : { "id" : "Linaqruf/anything-v3.0" },
 	"Anything v4.0 mix" : { "id" : "andite/anything-v4.0" },
+	"ACertainThing" : { "id" : "JosephusCheung/ACertainThing" },
+	"BPModel" : { "id" : "Crosstyan/BPModel" },
+	"SomethingV2.2" : { "id" : "NoCrypt/SomethingV2_2" },
 	"Stable Diffusion v1.5" : { "id" : "runwayml/stable-diffusion-v1-5" },
 	"Stable Diffusion v1.4" : { "id" : "CompVis/stable-diffusion-v1-4" }
 }

@@ -1,5 +1,5 @@
 from IPython.display import display
-from ipywidgets import Textarea, IntText, IntSlider, FloatSlider, HBox, Layout, Label
+from ipywidgets import Textarea, IntText, IntSlider, FloatSlider, HBox, Layout, Label, Button
 from PIL.PngImagePlugin import PngInfo
 import ipywidgets as widgets
 import io

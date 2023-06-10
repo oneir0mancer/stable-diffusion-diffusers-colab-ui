@@ -63,7 +63,7 @@ class BaseUI:
         return self._metadata 
     
     def _get_metadata_string(self):
-        return f"\nPrompt: {self.positive_prompt.value}\nNegative: {self.negative_prompt.value}\n CGF: {self.cfg_field.value} Steps {self.steps_field.value} "
+        return f"\nPrompt: {self.positive_prompt.value}\nNegative: {self.negative_prompt.value}\nCGF: {self.cfg_field.value} Steps {self.steps_field.value} "
         
     def get_dict_to_cache(self):
         return {
@@ -73,6 +73,7 @@ class BaseUI:
             "steps" : self.steps_field.value,
             "h" : self.height_field.value,
             "w" : self.width_field.value,
+            "batch" : self.batch_field.value,
         }
 
     def load_cache(self, cache):
@@ -82,3 +83,4 @@ class BaseUI:
         self.steps_field.value = cache["steps"]
         self.height_field.value = cache["h"]
         self.width_field.value = cache["w"]
+        self.batch_field.value = cache["batch"]

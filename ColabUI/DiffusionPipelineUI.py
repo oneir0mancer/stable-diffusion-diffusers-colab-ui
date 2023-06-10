@@ -1,18 +1,25 @@
 import torch
 from .BaseUI import BaseUI
 
-class DiffusionPipelineUI(BaseUI): 
+class DiffusionPipelineUI(BaseUI):
+    def __init__(self):
+        super().__init__()
+        self.__generator = torch.Generator(device="cuda")
+
     def generate(self, pipe, generator = None):
-        """Generate images given DiffusionPipeline, torch.GEnerator, and settings set in UI."""
+        """Generate images given DiffusionPipeline, and settings set in UI."""
         if self.seed_field.value >= 0: 
-            generator = torch.cuda.manual_seed(self.seed_field.value)
+            seed = self.seed_field.value
         else:
-            generator = torch.cuda.manual_seed(generator.seed())
+            seed = self.__generator.seed()
+
+        g = torch.cuda.manual_seed(seed)
+        self._metadata = self._get_metadata_string() + f"Seed: {seed} "
 
         results = pipe([self.positive_prompt.value]*self.batch_field.value, 
                        negative_prompt=[self.negative_prompt.value]*self.batch_field.value, 
                        num_inference_steps=self.steps_field.value, 
                        guidance_scale=self.cfg_field.value, 
-                       generator=generator, 
+                       generator=g, 
                        height=self.height_field.value, width=self.width_field.value)
         return results

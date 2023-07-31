@@ -1,6 +1,8 @@
 # Stable Diffusion with Colab UI
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/oneir0mancer/stable-diffusion-diffusers-colab-ui/blob/main/sd_diffusers_colab_ui.ipynb)
+Txt2Img: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/oneir0mancer/stable-diffusion-diffusers-colab-ui/blob/main/sd_diffusers_colab_ui.ipynb)
+
+Img2Img: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/oneir0mancer/stable-diffusion-diffusers-colab-ui/blob/main/sd_diffusers_img2img_ui.ipynb)
 
 This repository aims to emulate WebUI using just Colab and IPython widgets, without running a web server. 
 Since Google Colab [seems to prohibit](https://github.com/googlecolab/colabtools/issues/3591) running gradio WebUI, this may be a good alternative.
@@ -20,7 +22,7 @@ I use diffusers library to run stable diffusion, which has some problems with im
  - [X] Load textual inversions
  - [x] Load models in Automatic1111 (ckpt/safetensors) format
  - [x] Load LoRAs
- - [ ] Img2Img
+ - [x] Img2Img
  - [ ] Image mixing
  - [ ] Inpainting
 

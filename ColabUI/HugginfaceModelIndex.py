@@ -1,6 +1,9 @@
 from IPython.display import display
 from ipywidgets import Dropdown, HTML, HBox, Layout, Text, Checkbox
 import json
+import os
+import re
+from urllib.request import Request, urlopen
 
 class HugginfaceModelIndex:
     def __init__(self, filepath = "model_index.json"):
@@ -21,7 +24,7 @@ class HugginfaceModelIndex:
     def get_model_id(self):
         """Return model_id/url/local path of the model, and whether it should be loaded with from_ckpt"""
         if self.url_text.value != "":
-            return self.url_text.value, self.from_ckpt.value
+            return self.download_ckpt(self.url_text.value), self.from_ckpt.value
         return self.data[self.model_dropdown.value]["id"], False
 
     def __setup_model_dropdown(self):
@@ -61,8 +64,23 @@ class HugginfaceModelIndex:
             self.model_link.value = f"Model info: <a href={new_url}>link</a>"
             self.url_text.description = self.highlight("Url:")
             self.model_dropdown.description = "Model:"
+            if new_url.startswith("https://civitai.com/api/download/models/"):
+                self.from_ckpt.value = True
             self.from_ckpt.disabled = False
     
     @staticmethod
     def highlight(str_to_highlight): 
         return f"<font color='green'>{str_to_highlight}</font>"
+
+    @staticmethod
+    def download_ckpt(ckpt_url):
+        req = Request(ckpt_url)
+        req.add_header('User-agent', 'github/oneir0mancer/stable-diffusion-diffusers-colab-ui')
+        remotefile = urlopen(req)
+        contentdisposition = remotefile.info()['Content-Disposition']
+        filename = re.findall('filename="([^"]+)"', contentdisposition)[0]
+        if not os.path.exists(filename):
+            with open(filename, "wb") as localfile:
+                localfile.write(remotefile.read())
+        remotefile.close()
+        return filename

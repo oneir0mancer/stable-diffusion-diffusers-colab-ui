@@ -25,7 +25,7 @@ class HugginfaceModelIndex:
     def get_model_id(self):
         """Return model_id/url/local path of the model, and whether it should be loaded with from_ckpt"""
         if self.url_text.value != "":
-            return self.download_ckpt(self.url_text.value), self.from_ckpt.value
+            return self.__handle_url_value(self.url_text.value)
         return self.data[self.model_dropdown.value]["id"], False
 
     def __setup_model_dropdown(self):
@@ -68,10 +68,24 @@ class HugginfaceModelIndex:
             if new_url.startswith("https://civitai.com/api/download/models/") or new_url.endswith(".safetensors"):
                 self.from_ckpt.value = True
             self.from_ckpt.disabled = False
+
+    def __handle_url_value(self, url):
+        if url.startswith("https://huggingface.co/"):
+            return url, True
+        elif self.is_huggingface_model_id(url):
+            return url, False
+        elif os.path.exists(url):
+            return url, self.from_ckpt.value
+        else:
+            return self.download_ckpt(url), self.from_ckpt.value
     
     @staticmethod
     def highlight(str_to_highlight): 
         return f"<font color='green'>{str_to_highlight}</font>"
+
+    @staticmethod
+    def is_huggingface_model_id(url): 
+        return len(s.split('/')) == 2
 
     @staticmethod
     def download_ckpt(ckpt_url):

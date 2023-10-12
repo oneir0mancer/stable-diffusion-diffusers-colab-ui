@@ -1,6 +1,10 @@
 from IPython.display import display
 from ipywidgets import Dropdown, HTML, HBox, Layout, Text, Checkbox
 import json
+import requests
+import werkzeug
+import os
+from tqdm import tqdm
 
 class HugginfaceModelIndex:
     def __init__(self, filepath = "model_index.json"):
@@ -21,7 +25,7 @@ class HugginfaceModelIndex:
     def get_model_id(self):
         """Return model_id/url/local path of the model, and whether it should be loaded with from_ckpt"""
         if self.url_text.value != "":
-            return self.url_text.value, self.from_ckpt.value
+            return self.download_ckpt(self.url_text.value), self.from_ckpt.value
         return self.data[self.model_dropdown.value]["id"], False
 
     def __setup_model_dropdown(self):
@@ -61,8 +65,46 @@ class HugginfaceModelIndex:
             self.model_link.value = f"Model info: <a href={new_url}>link</a>"
             self.url_text.description = self.highlight("Url:")
             self.model_dropdown.description = "Model:"
+            if new_url.startswith("https://civitai.com/api/download/models/") or new_url.endswith(".safetensors"):
+                self.from_ckpt.value = True
             self.from_ckpt.disabled = False
     
     @staticmethod
     def highlight(str_to_highlight): 
         return f"<font color='green'>{str_to_highlight}</font>"
+
+    @staticmethod
+    def download_ckpt(ckpt_url):
+        """
+        download the checkpoint & return file name to be used in diffusers pipeline
+        additional actions:
+        - try to get file name from header or url
+        - download only if file not exist
+        - download with progress bar
+        """
+        HEADERS = {"User-Agent": "github/oneir0mancer/stable-diffusion-diffusers-colab-ui"}
+        with requests.get(ckpt_url, headers=HEADERS, stream=True) as resp:
+
+            # get file name
+            MISSING_FILENAME = "missing_name"
+            if content_disposition := resp.headers.get("Content-Disposition"):
+                param, options = werkzeug.http.parse_options_header(content_disposition)
+                if param == "attachment":
+                    filename = options.get("filename", MISSING_FILENAME)
+                else:
+                    filename = MISSING_FILENAME
+            else:
+                filename = os.path.basename(ckpt_url)
+                fileext = os.path.splitext(filename)[-1]
+                if fileext == "":
+                    filename = MISSING_FILENAME
+
+            # download file
+            if not os.path.exists(filename):
+                TOTAL_SIZE = int(resp.headers.get("Content-Length", 0))
+                CHUNK_SIZE = 50 * 1024**2  # 50 MiB or more as colab has high speed internet
+                with open(filename, mode="wb") as file, tqdm(total=TOTAL_SIZE, desc="download checkpoint", unit="iB", unit_scale=True) as progress_bar:
+                    for chunk in resp.iter_content(chunk_size=CHUNK_SIZE):
+                        progress_bar.update(len(chunk))
+                        file.write(chunk)
+        return filename

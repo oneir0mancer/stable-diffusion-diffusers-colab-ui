@@ -13,15 +13,15 @@ class HugginfaceModelIndex:
 
         self.model_link = HTML()
         self.from_ckpt = Checkbox(value=False, description="A1111 format")
-        
+
         self.__setup_url_field()
         self.__setup_model_dropdown()
- 
+
     def render(self):
         """Display ui"""
         self.__set_link_from_dict(self.model_dropdown.value)
         display(self.model_dropdown, HBox([self.url_text, self.from_ckpt]), self.model_link)
-        
+
     def get_model_id(self):
         """Return model_id/url/local path of the model, and whether it should be loaded with from_ckpt"""
         if self.url_text.value != "":
@@ -55,7 +55,7 @@ class HugginfaceModelIndex:
         except: pass
 
     def __set_link_from_url(self, new_url):
-        if new_url == "": 
+        if new_url == "":
             self.__set_link_from_dict(self.model_dropdown.value)
             self.url_text.description = "Url:"
             self.model_dropdown.description = self.highlight("Model:")
@@ -67,6 +67,10 @@ class HugginfaceModelIndex:
             self.model_dropdown.description = "Model:"
             if new_url.startswith("https://civitai.com/api/download/models/") or new_url.endswith(".safetensors"):
                 self.from_ckpt.value = True
+            elif self.is_huggingface_model_id(new_url):
+                self.from_ckpt.value = False
+            elif os.path.exists(new_url):
+                self.from_ckpt.value = os.path.isfile(new_url)
             self.from_ckpt.disabled = False
 
     def __handle_url_value(self, url):
@@ -78,14 +82,14 @@ class HugginfaceModelIndex:
             return url, self.from_ckpt.value
         else:
             return self.download_ckpt(url), self.from_ckpt.value
-    
+
     @staticmethod
-    def highlight(str_to_highlight): 
+    def highlight(str_to_highlight):
         return f"<font color='green'>{str_to_highlight}</font>"
 
     @staticmethod
-    def is_huggingface_model_id(url): 
-        return len(s.split('/')) == 2
+    def is_huggingface_model_id(url):
+        return len(url.split('/')) == 2
 
     @staticmethod
     def download_ckpt(ckpt_url):

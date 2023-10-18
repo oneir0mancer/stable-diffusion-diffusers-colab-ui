@@ -45,7 +45,8 @@ class DiffusionImg2ImgUI(BaseUI):
         g = torch.cuda.manual_seed(seed)
         self._metadata = self._get_metadata_string() + f"Seed: {seed} "
 
-        init_image.resize((self.width_field.value, self.height_field.value), resample=Image.BILINEAR)
+        init_image = init_image.convert('RGB')
+        init_image = init_image.resize((self.width_field.value, self.height_field.value), resample=Image.BILINEAR)
 
         results = pipe(image=init_image,
                        prompt=self.positive_prompt.value, 

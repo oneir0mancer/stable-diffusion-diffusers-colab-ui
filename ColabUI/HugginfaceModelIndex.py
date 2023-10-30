@@ -4,7 +4,7 @@ import json
 import requests
 import werkzeug
 import os
-from tqdm import tqdm
+from tqdm.notebook import tqdm
 
 class HugginfaceModelIndex:
     def __init__(self, filepath = "model_index.json"):

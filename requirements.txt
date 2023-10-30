@@ -1,0 +1,7 @@
+accelerate
+diffusers
+omegaconf
+pytorch-lightning
+safetensors
+transformers
+xformers==0.0.21

@@ -43,6 +43,9 @@ class ColabWrapper:
         vae = AutoencoderKL.from_pretrained(id_or_path, subfolder=subfolder, torch_dtype=torch.float16).to("cuda")
         self.pipe.vae = vae
 
+    def load_textual_inversion(self, path: str, filename: str):
+        self.pipe.load_textual_inversion(path, weight_name=filename)
+
     def load_textual_inversions(self, root_folder: str):
         for path, subdirs, files in os.walk(root_folder):
             for name in files:
@@ -52,8 +55,8 @@ class ColabWrapper:
                     print(path, name)
                 except: pass
 
-    def render_generation_ui(self, ui_interface):
-        self.ui = ui_interface()
+    def render_generation_ui(self, ui):
+        self.ui = ui
         if (self.cache is not None): self.ui.load_cache(self.cache)
         self.ui.render()
 

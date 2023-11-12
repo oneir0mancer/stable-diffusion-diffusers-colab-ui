@@ -2,7 +2,7 @@ import os
 import torch
 from diffusers import EulerAncestralDiscreteScheduler, DPMSolverMultistepScheduler, UniPCMultistepScheduler
 from diffusers import AutoencoderKL
-from HugginfaceModelIndex import HugginfaceModelIndex
+from .HugginfaceModelIndex import HugginfaceModelIndex
 
 class ColabWrapper:
     def __init__(self, output_dir: str):
@@ -65,7 +65,7 @@ class ColabWrapper:
         results = self.ui.generate(self.pipe)
         if save_images:
             for i, image in enumerate(results.images):
-                path = os.path.join(self.output_dir, f"{output_index:05}.png")
+                path = os.path.join(self.output_dir, f"{self.output_index:05}.png")
                 self.ui.save_image_with_metadata(image, path, f"Batch: {i}\n")
                 print(path)
                 self.output_index += 1

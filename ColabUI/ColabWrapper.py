@@ -2,6 +2,7 @@ import os
 import torch
 from diffusers import EulerAncestralDiscreteScheduler, DPMSolverMultistepScheduler, UniPCMultistepScheduler
 from diffusers import AutoencoderKL
+from .ArtistIndex import ArtistIndex
 from .HugginfaceModelIndex import HugginfaceModelIndex
 
 class ColabWrapper:
@@ -55,10 +56,14 @@ class ColabWrapper:
                     print(path, name)
                 except: pass
 
-    def render_generation_ui(self, ui):
+    def render_generation_ui(self, ui, artist_index: str = None):
         self.ui = ui
         if (self.cache is not None): self.ui.load_cache(self.cache)
         self.ui.render()
+        
+        if artist_index is None: artist_index = "/content/StableDiffusionUi/artist_index.json"
+        self.flair = ArtistIndex(ui, artist_index)
+        self.flair.render()
 
     def generate(self, save_images: bool, display_previewes: bool):
         self.cache = self.ui.get_dict_to_cache()

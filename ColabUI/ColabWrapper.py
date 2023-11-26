@@ -4,12 +4,15 @@ from diffusers import EulerAncestralDiscreteScheduler, DPMSolverMultistepSchedul
 from diffusers import AutoencoderKL
 from .ArtistIndex import ArtistIndex
 from .HugginfaceModelIndex import HugginfaceModelIndex
+from .LoraDownloader import LoraDownloader
+from .LoraApplyer import LoraApplyer
 
 class ColabWrapper:
     def __init__(self, output_dir: str):
         self.output_dir = output_dir
         self.output_index = 0
         self.cache = None
+        self.lora_cache = None
 
     def render_model_index(self, filepath: str):
         self.model_index = HugginfaceModelIndex(filepath)
@@ -55,6 +58,14 @@ class ColabWrapper:
                     self.pipe.load_textual_inversion(path, weight_name=name)
                     print(path, name)
                 except: pass
+
+    def render_lora_loader(self, output_dir="Lora"):
+        self.lora_downloader = LoraDownloader(self.pipe, output_dir, self.lora_cache)
+        self.lora_downloader.render()
+
+    def render_lora_ui(self):
+        self.lora_ui = LoraApplyer(self.pipe, self.lora_downloader)
+        self.lora_ui.render()
 
     def render_generation_ui(self, ui, artist_index: str = None):
         self.ui = ui

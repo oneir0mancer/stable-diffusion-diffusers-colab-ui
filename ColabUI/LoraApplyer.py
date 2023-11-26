@@ -8,6 +8,7 @@ class LoraApplyer:
         self.__cache = loader.cache
         self.__applier_loras = dict()
         self.vbox = VBox()
+        self.is_fused = False
 
         self.__setup_dropdown()
         loader.on_load_event.clear_callbacks()
@@ -20,6 +21,18 @@ class LoraApplyer:
 
     def render(self):
         display(HBox([self.dropdown, self.add_button]), self.vbox)
+
+    def fuse_lora(self):
+        if self.is_fused: return
+        self.is_fused = True
+        self.__apply_adapters()
+        self.pipe.fuse_lora()
+        #TODO disable button interactivity
+
+    def unfuse_lora(self):
+        if not self.is_fused: return
+        self.is_fused = False
+        self.pipe.unfuse_lora()
 
     def __setup_dropdown(self):
         self.dropdown = Dropdown(
@@ -58,5 +71,7 @@ class LoraApplyer:
         self.vbox.children = w
 
     def __apply_adapters(self):
-        pipe.set_adapters([x for x in self.__applier_loras.keys()], 
+        if self.is_fused: return
+        self.pipe.enable_lora()     #TODO use separate button
+        self.pipe.set_adapters([x for x in self.__applier_loras.keys()], 
                           adapter_weights=[x for x in self.__applier_loras.values()])

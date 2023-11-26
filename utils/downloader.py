@@ -3,7 +3,7 @@ import werkzeug
 import os
 from tqdm.notebook import tqdm
 
-def download_ckpt(ckpt_url):
+def download_ckpt(ckpt_url, output_dir=None):
     """
     download the checkpoint & return file name to be used in diffusers pipeline
     additional actions:
@@ -27,6 +27,8 @@ def download_ckpt(ckpt_url):
             fileext = os.path.splitext(filename)[-1]
             if fileext == "":
                 filename = MISSING_FILENAME
+
+        if output_dir is not None: filename = os.path.join(output_dir, filename)
 
         # download file
         if not os.path.exists(filename):

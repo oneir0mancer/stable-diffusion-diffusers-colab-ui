@@ -53,22 +53,28 @@ class LoraApplyer:
     def __rerender_items(self):
         w = []
         for adapter, scale in self.__applier_loras.items():
-            slider = FloatSlider(min=0, max=1.5, value=scale, step=0.05, description=adapter)
-            def value_changed(change):
-                self.__applier_loras[adapter] = change.new
-                self.__apply_adapters()
-            slider.observe(value_changed, 'value')
-
-            remove_btn = Button(description="X", layout=Layout(width='40px'))
-            def on_button(b):
-                del self.__applier_loras[adapter]
-                self.__rerender_items()
-                self.__apply_adapters()
-            remove_btn.on_click(on_button)
-
+            slider = self.__add_lora_scale_slider(adapter, scale)
+            remove_btn = self.__add_lora_remove_button(adapter)
             w.append(HBox([slider, remove_btn]))
 
         self.vbox.children = w
+
+    def __add_lora_scale_slider(self, adapter, scale):
+        slider = FloatSlider(min=0, max=1.5, value=scale, step=0.05, description=adapter)
+        def value_changed(change):
+            self.__applier_loras[adapter] = change.new
+            self.__apply_adapters()
+        slider.observe(value_changed, 'value')
+        return slider
+
+    def __add_lora_remove_button(self, adapter):
+        remove_btn = Button(description="X", layout=Layout(width='40px'))
+        def on_button(b):
+            del self.__applier_loras[adapter]
+            self.__rerender_items()
+            self.__apply_adapters()
+        remove_btn.on_click(on_button)
+        return remove_btn
 
     def __apply_adapters(self):
         if self.is_fused: return

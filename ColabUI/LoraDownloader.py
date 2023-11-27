@@ -35,6 +35,8 @@ class LoraDownloader:
     def load_lora(self, url, adapter_name=""):
         if url.startswith("https://civitai.com/api/download/models/") or url.endswith(".safetensors"):
             filepath = download_ckpt(url, self.output_dir)
+        elif os.path.isfile(url):
+            filepath = url
         else:
             print("Error")
             return

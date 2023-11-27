@@ -1,4 +1,5 @@
 import os
+import gdown
 from IPython.display import display
 from ipywidgets import Dropdown, Button, HBox, Layout, Text
 from ..utils.downloader import download_ckpt
@@ -18,6 +19,7 @@ class LoraDownloader:
         def url_changed(change):
             self.adapter_field.value = ""
         self.url_text.observe(url_changed, 'value')
+        self.url_text.description_tooltip = "Url or filepath to Lora. Supports google drive links."
 
         self.adapter_field = Text(placeholder="Adapter name", layout=Layout(width='150px'))
         self.adapter_field.description_tooltip = "Custom name for Lora. Default is filename."
@@ -33,10 +35,14 @@ class LoraDownloader:
         display(HBox([self.url_text, self.adapter_field, self.load_button]))
 
     def load_lora(self, url, adapter_name=""):
-        if url.startswith("https://civitai.com/api/download/models/") or url.endswith(".safetensors"):
-            filepath = download_ckpt(url, self.output_dir)
-        elif os.path.isfile(url):
+        if os.path.isfile(url):
             filepath = url
+        elif url.startswith("https://drive.google.com"):
+            id = gdown.parse_url.parse_url(url)[0]
+            if not self.output_dir.endswith("/"): self.output_dir += "/"
+            filepath = gdown.download(f"https://drive.google.com/uc?id={id}", self.output_dir)            
+        elif url.startswith("https://civitai.com/api/download/models/") or url.endswith(".safetensors"):
+            filepath = download_ckpt(url, self.output_dir)
         else:
             print("Error")
             return

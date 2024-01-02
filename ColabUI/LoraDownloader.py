@@ -1,17 +1,19 @@
 import os
 import gdown
 from IPython.display import display
-from ipywidgets import Dropdown, Button, HBox, Layout, Text
+from ipywidgets import Dropdown, Button, HBox, Layout, Text, Output
 from ..utils.downloader import download_ckpt
 from ..utils.event import Event
+from ..utils.empty_output import EmptyOutput
 
 class LoraDownloader:
     __cache = dict()
 
-    def __init__(self, pipe, output_dir="Lora", cache=None):
+    def __init__(self, pipe, out:Output = None, output_dir:str = "Lora", cache = None):
         self.output_dir = output_dir
         self.pipe = pipe
-        self.pipe.disable_lora()
+        if out is None: out = EmptyOutput()
+        self.out = out
 
         if cache is not None: self.load_cache(cache)
 
@@ -26,13 +28,12 @@ class LoraDownloader:
 
         self.load_button = Button(description="Load", layout=Layout(width='50px'))
         def load(b):
-            self.load_lora(self.url_text.value, self.adapter_field.value)
+            self.out.clear_output()
+            with self.out:
+                self.load_lora(self.url_text.value, self.adapter_field.value)
         self.load_button.on_click(load)
         
         self.on_load_event = Event()
-
-    def render(self):
-        display(HBox([self.url_text, self.adapter_field, self.load_button]))
 
     def load_lora(self, url, adapter_name=""):
         if os.path.isfile(url):
@@ -71,6 +72,9 @@ class LoraDownloader:
     @property
     def render_module(self):
         return HBox([self.url_text, self.adapter_field, self.load_button])
+
+    def render(self):
+        display(self.render_module)
 
     def _ipython_display_(self):
         self.render()

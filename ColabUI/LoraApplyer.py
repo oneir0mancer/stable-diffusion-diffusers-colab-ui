@@ -11,6 +11,7 @@ class LoraApplyer:
         self.is_fused = False
 
         self.__setup_dropdown()
+        #TODO move this to caller
         loader.on_load_event.clear_callbacks()
         loader.on_load_event.add_callback(self.__update_dropdown)
 
@@ -18,9 +19,6 @@ class LoraApplyer:
         def add_lora(b):
             self.__add_lora(self.dropdown.value, 1)
         self.add_button.on_click(add_lora)
-
-    def render(self):
-        display(HBox([self.dropdown, self.add_button]), self.vbox)
 
     def fuse_lora(self):
         if self.is_fused: return
@@ -81,6 +79,13 @@ class LoraApplyer:
         self.pipe.enable_lora()     #TODO use separate button
         self.pipe.set_adapters([x for x in self.__applier_loras.keys()], 
                           adapter_weights=[x for x in self.__applier_loras.values()])
+
+    @property
+    def render_element(self): 
+        return VBox([HBox([self.dropdown, self.add_button]), self.vbox])
+
+    def render(self):
+        display(self.render_element)
 
     def _ipython_display_(self):
         self.render()

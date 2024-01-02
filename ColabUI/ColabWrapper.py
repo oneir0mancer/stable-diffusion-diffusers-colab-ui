@@ -60,7 +60,7 @@ class ColabWrapper:
                 except: pass
 
     def render_lora_loader(self, output_dir="Lora"):
-        self.lora_downloader = LoraDownloader(self.pipe, output_dir, self.lora_cache)
+        self.lora_downloader = LoraDownloader(self.pipe, output_dir=output_dir, cache=self.lora_cache)
         self.lora_downloader.render()
 
     def render_lora_ui(self):

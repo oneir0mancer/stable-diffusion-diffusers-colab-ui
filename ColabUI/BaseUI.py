@@ -84,3 +84,6 @@ class BaseUI:
         self.height_field.value = cache["h"]
         self.width_field.value = cache["w"]
         self.batch_field.value = cache["batch"]
+
+    def _ipython_display_(self):
+        self.render()

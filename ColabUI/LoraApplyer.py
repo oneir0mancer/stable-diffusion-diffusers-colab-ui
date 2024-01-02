@@ -81,3 +81,6 @@ class LoraApplyer:
         self.pipe.enable_lora()     #TODO use separate button
         self.pipe.set_adapters([x for x in self.__applier_loras.keys()], 
                           adapter_weights=[x for x in self.__applier_loras.values()])
+
+    def _ipython_display_(self):
+        self.render()

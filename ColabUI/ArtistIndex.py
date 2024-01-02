@@ -55,3 +55,6 @@ class ArtistIndex:
         self.__clipboard = item
         key = item.lower().replace(" ", "-")
         self.example_link.value = f"Example: <a href=https://midlibrary.io/styles/{key}>{item}</a>"
+
+    def _ipython_display_(self):
+        self.render()

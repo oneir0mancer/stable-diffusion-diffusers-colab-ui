@@ -71,3 +71,6 @@ class LoraDownloader:
     @property
     def render_module(self):
         return HBox([self.url_text, self.adapter_field, self.load_button])
+
+    def _ipython_display_(self):
+        self.render()

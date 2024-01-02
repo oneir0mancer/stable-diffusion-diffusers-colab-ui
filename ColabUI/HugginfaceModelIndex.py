@@ -91,3 +91,6 @@ class HugginfaceModelIndex:
     @staticmethod
     def is_huggingface_model_id(url):
         return len(url.split('/')) == 2
+
+    def _ipython_display_(self):
+        self.render()

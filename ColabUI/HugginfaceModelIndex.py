@@ -75,9 +75,7 @@ class HugginfaceModelIndex:
             self.from_ckpt.disabled = False
 
     def __handle_url_value(self, url):
-        if url.startswith("https://huggingface.co/"):
-            return url, True
-        elif self.is_huggingface_model_id(url):
+        if self.is_huggingface_model_id(url):
             return url, False
         elif os.path.exists(url):
             return url, self.from_ckpt.value

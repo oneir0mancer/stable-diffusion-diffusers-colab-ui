@@ -43,7 +43,7 @@ class TextualInversionChoice:
                     self.colab.pipe.load_textual_inversion(path, weight_name=name)
                     print(f"{path}:\t<{os.path.splitext(name)[0]}>")
                     n += 1
-                except: pass
+                except ValueError: pass
         print(f"{n} items added")
 
     @property

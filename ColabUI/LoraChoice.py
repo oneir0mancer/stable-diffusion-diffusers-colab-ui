@@ -4,15 +4,16 @@ from .LoraDownloader import LoraDownloader
 from .LoraApplyer import LoraApplyer
 
 class LoraChoice:
-    def __init__(self, colab, out:Output = None, download_dir:str = "Lora", lora_cache=None):
+    def __init__(self, colab, out:Output = None, download_dir:str = "Lora", lora_cache:dict = None):
         self.colab = colab
 
         self.label_download = HTML(markdown.markdown("## Load Lora")) 
-        self.lora_downloader = LoraDownloader(colab.pipe, out, output_dir=download_dir, cache=lora_cache)
+        self.lora_downloader = LoraDownloader(colab, out, output_dir=download_dir, cache=lora_cache)
         self.label_apply = HTML(markdown.markdown("## Apply Lora")) 
-        self.lora_ui = LoraApplyer(colab.pipe, self.lora_downloader)
-
-        #TODO handle connection between them here
+        self.lora_ui = LoraApplyer(colab, cache=lora_cache)
+        
+        self.lora_downloader.on_load_event.clear_callbacks()
+        self.lora_downloader.on_load_event.add_callback(self.update_dropdown)
 
     @property
     def render_element(self): 

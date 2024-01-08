@@ -1,6 +1,7 @@
 import torch
 from ipywidgets import Text, Layout, Button, HBox, VBox, Output
 from diffusers import AutoencoderKL
+from ..utils.downloader import download_ckpt
 from ..utils.empty_output import EmptyOutput
 
 class VaeChoice:
@@ -30,13 +31,15 @@ class VaeChoice:
             raise ValueError("VAE text field shouldn't be empty")
 
         if self.id_text.value.endswith(".safetensors"):
-            vae = AutoencoderKL.from_single_file(self.id_text.value, torch_dtype=torch.float16)
+            filepath = download_ckpt(self.id_text.value)    #TODO download dir
+            vae = AutoencoderKL.from_single_file(filepath, torch_dtype=torch.float16)
         else:
             if self.subfolder_text.value == "": 
                 raise ValueError("Subfolder text field shouldn't be empty when loading diffusers-style model")
             vae = AutoencoderKL.from_pretrained(self.id_text.value, subfolder=self.subfolder_text.value, torch_dtype=torch.float16)
 
         pipe.vae = vae.to("cuda")
+        print(f"{self.id_text.value} VAE loaded")
 
     @property
     def render_element(self): 

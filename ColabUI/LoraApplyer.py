@@ -3,17 +3,14 @@ from IPython.display import display
 from .LoraDownloader import LoraDownloader
 
 class LoraApplyer:
-    def __init__(self, pipe, loader: LoraDownloader):
-        self.pipe = pipe
-        self.__cache = loader.cache
+    def __init__(self, colab, cache = None):
+        self.colab = colab
+        self.__cache = cache
         self.__applier_loras = dict()
         self.vbox = VBox()
         self.is_fused = False
 
         self.__setup_dropdown()
-        #TODO move this to caller
-        loader.on_load_event.clear_callbacks()
-        loader.on_load_event.add_callback(self.__update_dropdown)
 
         self.add_button = Button(description="Add", layout=Layout(width='50px'))
         def add_lora(b):
@@ -24,13 +21,13 @@ class LoraApplyer:
         if self.is_fused: return
         self.is_fused = True
         self.__apply_adapters()
-        self.pipe.fuse_lora()
+        self.colab.pipe.fuse_lora()
         #TODO disable button interactivity
 
     def unfuse_lora(self):
         if not self.is_fused: return
         self.is_fused = False
-        self.pipe.unfuse_lora()
+        self.colab.pipe.unfuse_lora()
 
     def __setup_dropdown(self):
         self.dropdown = Dropdown(
@@ -39,7 +36,7 @@ class LoraApplyer:
         )
         self.dropdown.description_tooltip = "Choose lora to load"
 
-    def __update_dropdown(self, new_adapter):
+    def update_dropdown(self, new_adapter):
         self.dropdown.options = [x for x in self.__cache]
 
     def __add_lora(self, adapter: str, scale: float):
@@ -76,8 +73,8 @@ class LoraApplyer:
 
     def __apply_adapters(self):
         if self.is_fused: return
-        self.pipe.enable_lora()     #TODO use separate button
-        self.pipe.set_adapters([x for x in self.__applier_loras.keys()], 
+        self.colab.pipe.enable_lora()     #TODO use separate button
+        self.colab.pipe.set_adapters([x for x in self.__applier_loras.keys()], 
                           adapter_weights=[x for x in self.__applier_loras.values()])
 
     @property

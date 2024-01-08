@@ -9,9 +9,9 @@ from ..utils.empty_output import EmptyOutput
 class LoraDownloader:
     __cache = dict()
 
-    def __init__(self, pipe, out:Output = None, output_dir:str = "Lora", cache = None):
+    def __init__(self, colab, out:Output = None, output_dir:str = "Lora", cache = None):
         self.output_dir = output_dir
-        self.pipe = pipe
+        self.colab = colab
         if out is None: out = EmptyOutput()
         self.out = out
 
@@ -52,7 +52,7 @@ class LoraDownloader:
         if adapter_name == "": 
             adapter_name = os.path.splitext(filename)[0]
             self.adapter_field.value = adapter_name
-        self.pipe.load_lora_weights(self.output_dir, weight_name=filename, adapter_name=adapter_name)
+        self.colab.pipe.load_lora_weights(self.output_dir, weight_name=filename, adapter_name=adapter_name)
         self.__cache[adapter_name] = filepath
 
         self.on_load_event.invoke(adapter_name)
@@ -61,7 +61,7 @@ class LoraDownloader:
         for adapter_name, filepath in cache.items():
             try:
                 filename = os.path.basename(filepath)
-                self.pipe.load_lora_weights(os.path.dirname(filepath), weight_name=filename, adapter_name=adapter_name)
+                self.colab.pipe.load_lora_weights(os.path.dirname(filepath), weight_name=filename, adapter_name=adapter_name)
                 self.__cache[adapter_name] = filepath
             except: pass
 

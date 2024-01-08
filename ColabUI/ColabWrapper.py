@@ -13,6 +13,7 @@ class ColabWrapper:
         self.output_index = 0
         self.cache = None
         self.lora_cache = None
+        self.pipe = None
 
     def render_model_index(self, filepath: str):
         self.model_index = HugginfaceModelIndex(filepath)
@@ -28,6 +29,10 @@ class ColabWrapper:
             torch_dtype=torch.float16).to("cuda")
         self.pipe.safety_checker = None
         self.pipe.enable_xformers_memory_efficient_attention()
+
+    def render_settings(self):
+        self.settings = SettingsTabs(colab)
+        display(self.settings)
 
     def choose_sampler(self, sampler_name: str):
         config = self.pipe.scheduler.config

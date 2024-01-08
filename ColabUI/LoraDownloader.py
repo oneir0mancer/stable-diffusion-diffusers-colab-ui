@@ -70,11 +70,11 @@ class LoraDownloader:
         return self.__cache
 
     @property
-    def render_module(self):
+    def render_element(self):
         return HBox([self.url_text, self.adapter_field, self.load_button])
 
     def render(self):
-        display(self.render_module)
+        display(self.render_element)
 
     def _ipython_display_(self):
         self.render()

@@ -31,17 +31,20 @@ class TextualInversionChoice:
 
     #TODO load from file: https://huggingface.co/docs/diffusers/api/loaders/textual_inversion
     def __load_textual_inversion(self, pipe, path: str, filename: str):
-        self.pipe.load_textual_inversion(path, weight_name=filename)
+        self.colab.pipe.load_textual_inversion(path, weight_name=filename)
         print(f"<{os.path.splitext(filename)[0]}>")
 
     def __load_textual_inversions_from_folder(self, pipe, root_folder: str):
+        n = 0
         for path, subdirs, files in os.walk(root_folder):
             for name in files:
                 try:
                     if os.path.splitext(name)[1] != ".pt": continue
-                    self.pipe.load_textual_inversion(path, weight_name=name)
+                    self.colab.pipe.load_textual_inversion(path, weight_name=name)
                     print(f"{path}:\t<{os.path.splitext(name)[0]}>")
+                    n += 1
                 except: pass
+        print(f"{n} items added")
 
     @property
     def render_element(self): 

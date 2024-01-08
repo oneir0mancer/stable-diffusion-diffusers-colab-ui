@@ -12,7 +12,7 @@ class ColabWrapper:
         self.output_dir = output_dir
         self.output_index = 0
         self.cache = None
-        self.lora_cache = None
+        self.lora_cache = dict()
         self.pipe = None
 
     def render_model_index(self, filepath: str):

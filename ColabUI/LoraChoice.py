@@ -13,7 +13,7 @@ class LoraChoice:
         self.lora_ui = LoraApplyer(colab, cache=lora_cache)
         
         self.lora_downloader.on_load_event.clear_callbacks()
-        self.lora_downloader.on_load_event.add_callback(self.update_dropdown)
+        self.lora_downloader.on_load_event.add_callback(self.lora_ui.update_dropdown)
 
     @property
     def render_element(self): 

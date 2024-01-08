@@ -17,7 +17,7 @@ class SettingsTabs:
         self.sampler_choice = SamplerChoice(self.colab, self.output)
         self.vae_choice = VaeChoice(self.colab, self.output)
         self.ti_choice = TextualInversionChoice(self.colab, self.output)
-        self.lora_choice = LoraChoice(self.colab, self.output)
+        self.lora_choice = LoraChoice(self.colab, self.output, lora_cache=colab.lora_cache)
 
         self.tabs = Tab()
         self.tabs.children = [self.sampler_choice.render_element, 

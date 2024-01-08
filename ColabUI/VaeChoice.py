@@ -1,8 +1,9 @@
 import torch
-from ipywidgets import Text, Label, Layout, Button, HBox, VBox, Output
+from ipywidgets import Text, Layout, Button, HBox, VBox, Output
 from diffusers import AutoencoderKL
 from ..utils.downloader import download_ckpt
 from ..utils.empty_output import EmptyOutput
+from ..utils.markdown import SpoilerLabel
 
 class VaeChoice:
     def __init__(self, colab, out:Output = None, default_id:str = "waifu-diffusion/wd-1-5-beta2"):
@@ -10,7 +11,7 @@ class VaeChoice:
         if out is None: out = EmptyOutput()
         self.out = out
 
-        self.tooltip_label = Label(value = "If vae is in single file, just leave 'Subfolder' field empty.")
+        self.tooltip_label = SpoilerLabel("Loading single file", "If vae is in single file, just leave 'Subfolder' field empty.")
         self.id_text = Text(description="VAE:", placeholder='Id or path...', layout=Layout(width="35%"))
         self.id_text.description_tooltip = "Huggingface model id, url, or a path to a root folder/file"
         if default_id is not None: self.id_text.value = default_id

@@ -1,5 +1,5 @@
 import os
-from ipywidgets import Text, Button, Layout, VBox, Output
+from ipywidgets import Text, Button, Layout, Combobox, VBox, Output
 from ..utils.empty_output import EmptyOutput
 from ..utils.markdown import SpoilerLabel
 
@@ -8,6 +8,7 @@ class TextualInversionChoice:
         self.colab = colab
         if out is None: out = EmptyOutput()
         self.out = out
+        self.tokens = list()
 
         self.tooltip_label = SpoilerLabel("Tooltip", "Paste a path to Textual Inversion .pt file, or path to a folder containig them.")
         self.path = Text(description="TI:", placeholder='Path to file or folder...', layout=Layout(width="50%"))
@@ -20,6 +21,8 @@ class TextualInversionChoice:
             with self.out: 
                 self.load(self.colab.pipe)
         self.load_button.on_click(on_load_clicked)
+        
+        self.token_list = Combobox(placeholder="Start typing token", description="Tokens:", ensure_option=True)
 
     def load(self, pipe):
         if self.path.value == "": 
@@ -34,7 +37,10 @@ class TextualInversionChoice:
     #TODO load from file: https://huggingface.co/docs/diffusers/api/loaders/textual_inversion
     def __load_textual_inversion(self, pipe, path: str, filename: str):
         self.colab.pipe.load_textual_inversion(path, weight_name=filename)
-        print(f"<{os.path.splitext(filename)[0]}>")
+        
+        token = f"<{os.path.splitext(filename)[0]}>"
+        self.__add_token(token)
+        print(token)
 
     def __load_textual_inversions_from_folder(self, pipe, root_folder: str):
         n = 0
@@ -43,14 +49,21 @@ class TextualInversionChoice:
                 try:
                     if os.path.splitext(name)[1] != ".pt": continue
                     self.colab.pipe.load_textual_inversion(path, weight_name=name)
-                    print(f"{path}:\t<{os.path.splitext(name)[0]}>")
+                    
+                    token = f"<{os.path.splitext(name)[0]}>"
+                    self.__add_token(token)
+                    print(f"{path}:\t{token}")
                     n += 1
                 except ValueError: pass
         print(f"{n} items added")
 
+    def __add_token(self, token:str):
+        self.tokens.append(token)
+        self.token_list.options = self.tokens
+
     @property
     def render_element(self): 
-        return VBox([self.tooltip_label.render_element, self.path, self.load_button])
+        return VBox([self.tooltip_label.render_element, self.path, self.load_button, self.token_list])
 
     def render(self):
         display(self.render_element)

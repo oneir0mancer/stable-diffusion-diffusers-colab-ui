@@ -1,5 +1,5 @@
 import os
-from ipywidgets import Text, Button, Layout, VBox, Output
+from ipywidgets import Text, Label, Button, Layout, VBox, Output
 from ..utils.empty_output import EmptyOutput
 
 class TextualInversionChoice:
@@ -8,6 +8,7 @@ class TextualInversionChoice:
         if out is None: out = EmptyOutput()
         self.out = out
 
+        self.tooltip_label = Label(value = "Paste a path to Textual Inversion .pt file, or path to a folder containig them.")
         self.path = Text(description="TI:", placeholder='Path to file or folder...', layout=Layout(width="50%"))
         self.path.description_tooltip = "Path to a Textual Inversion file or root folder"
         if default_path is not None: self.path.value = default_path
@@ -48,7 +49,7 @@ class TextualInversionChoice:
 
     @property
     def render_element(self): 
-        return VBox([self.path, self.load_button])
+        return VBox([self.tooltip_label, self.path, self.load_button])
 
     def render(self):
         display(self.render_element)

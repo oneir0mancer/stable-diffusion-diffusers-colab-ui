@@ -1,5 +1,5 @@
 import torch
-from ipywidgets import Text, Layout, Button, HBox, VBox, Output
+from ipywidgets import Text, Label, Layout, Button, HBox, VBox, Output
 from diffusers import AutoencoderKL
 from ..utils.downloader import download_ckpt
 from ..utils.empty_output import EmptyOutput
@@ -10,6 +10,7 @@ class VaeChoice:
         if out is None: out = EmptyOutput()
         self.out = out
 
+        self.tooltip_label = Label(value = "If vae is in single file, just leave 'Subfolder' field empty.")
         self.id_text = Text(description="VAE:", placeholder='Id or path...', layout=Layout(width="35%"))
         self.id_text.description_tooltip = "Huggingface model id, url, or a path to a root folder/file"
         if default_id is not None: self.id_text.value = default_id
@@ -43,7 +44,7 @@ class VaeChoice:
 
     @property
     def render_element(self): 
-        return VBox([HBox([self.id_text, self.subfolder_text]), self.button])
+        return VBox([self.tooltip_label, HBox([self.id_text, self.subfolder_text]), self.button])
 
     def render(self):
         display(self.render_element)

@@ -50,7 +50,7 @@ class TextualInversionChoice:
 
     @property
     def render_element(self): 
-        return VBox([self.tooltip_label, self.path, self.load_button])
+        return VBox([self.tooltip_label.render_element, self.path, self.load_button])
 
     def render(self):
         display(self.render_element)

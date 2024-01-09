@@ -38,6 +38,7 @@ class LoraDownloader:
             self.out.clear_output()
             with self.out: self.repair()
         self.repair_button.on_click(on_repair_btn)
+        self.repair_button.tooltip = "Click to refresh list of loaded Loras in case of errors"
         
         self.on_load_event = Event()
 
@@ -72,12 +73,12 @@ class LoraDownloader:
             except: pass
 
     def repair(self):
-        adapters_dict = colab.pipe.get_list_adapters()
+        adapters_dict = self.colab.pipe.get_list_adapters()
         print(adapters_dict)
         adapters = {x for module in adapters_dict.values() for x in module}
         for a in adapters:
             self.__cache[a] = None
-        self.on_load_event.invoke(None) #no need to call for each adapter, TODO argument
+        self.on_load_event.invoke("") #no need to call for each adapter, TODO argument
 
     @property
     def cache(self):

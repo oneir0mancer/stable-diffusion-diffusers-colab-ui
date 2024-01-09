@@ -10,7 +10,7 @@ class LoraChoice:
         self.label_download = HTML(markdown.markdown("## Load Lora")) 
         self.lora_downloader = LoraDownloader(colab, out, output_dir=download_dir, cache=lora_cache)
         self.label_apply = HTML(markdown.markdown("## Apply Lora")) 
-        self.lora_ui = LoraApplyer(colab, out, cache=lora_cache)
+        self.lora_ui = LoraApplyer(colab, out, cache=self.lora_downloader.cache)
         
         self.lora_downloader.on_load_event.clear_callbacks()
         self.lora_downloader.on_load_event.add_callback(self.lora_ui.update_dropdown)

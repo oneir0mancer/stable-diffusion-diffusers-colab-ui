@@ -39,15 +39,15 @@ class LoraApplyer:
     def fuse_lora(self):
         if self.is_fused: return
         self.is_fused = True
+        self.__set_ui_fuse_state(True)
         self.__apply_adapters()
         self.colab.pipe.fuse_lora()
-        self.__set_ui_fuse_state(True)
 
     def unfuse_lora(self):
         if not self.is_fused: return
         self.is_fused = False
-        self.colab.pipe.unfuse_lora()
         self.__set_ui_fuse_state(False)
+        self.colab.pipe.unfuse_lora()
 
     def __setup_dropdown(self):
         self.dropdown = Dropdown(

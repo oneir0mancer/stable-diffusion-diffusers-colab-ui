@@ -6,6 +6,7 @@ from .ArtistIndex import ArtistIndex
 from .HugginfaceModelIndex import HugginfaceModelIndex
 from .LoraDownloader import LoraDownloader
 from .LoraApplyer import LoraApplyer
+from .SettingsTabs import SettingsTabs
 
 class ColabWrapper:
     def __init__(self, output_dir: str):

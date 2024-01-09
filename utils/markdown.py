@@ -1,21 +1,14 @@
 import markdown
 from ipywidgets import HTML
 
-class SpoilerLabel:
-    def __init__(self, warning, text):
-        self.text = f"""
+def SpoilerLabel(warning:str, spoiler_text:str):
+    md = f"""
 <details>
     <summary>{warning}</summary>
-    {text}
+    {spoiler_text}
 </details>
 """
+    return HTML(markdown.markdown(md))
 
-    @property
-    def render_element(self): 
-        return HTML(markdown.markdown(self.text))
-
-    def render(self):
-        display(self.render_element)
-
-    def _ipython_display_(self):
-        self.render()
+def MarkdownLabel(text:str):
+    return HTML(markdown.markdown(text))

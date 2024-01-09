@@ -45,7 +45,7 @@ class VaeChoice:
 
     @property
     def render_element(self): 
-        return VBox([self.tooltip_label.render_element, HBox([self.id_text, self.subfolder_text]), self.button])
+        return VBox([self.tooltip_label, HBox([self.id_text, self.subfolder_text]), self.button])
 
     def render(self):
         display(self.render_element)

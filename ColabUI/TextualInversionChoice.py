@@ -54,7 +54,7 @@ class TextualInversionChoice:
                     self.__add_token(token)
                     print(f"{path}:\t{token}")
                     n += 1
-                except ValueError: pass
+                except: pass    #TODO save exception ?
         print(f"{n} items added")
 
     def __add_token(self, token:str):
@@ -63,7 +63,7 @@ class TextualInversionChoice:
 
     @property
     def render_element(self): 
-        return VBox([self.tooltip_label.render_element, self.path, self.load_button, self.token_list])
+        return VBox([self.tooltip_label, self.path, self.load_button, self.token_list])
 
     def render(self):
         display(self.render_element)

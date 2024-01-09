@@ -33,6 +33,12 @@ class LoraDownloader:
                 self.load_lora(self.url_text.value, self.adapter_field.value)
         self.load_button.on_click(load)
         
+        self.repair_button = Button(description="Repair", layout=Layout(width='75px'), button_style='info')
+        def on_repair_btn(b):
+            self.out.clear_output()
+            with self.out: self.repair()
+        self.repair_button.on_click(on_repair_btn)
+        
         self.on_load_event = Event()
 
     def load_lora(self, url, adapter_name=""):
@@ -65,13 +71,21 @@ class LoraDownloader:
                 self.__cache[adapter_name] = filepath
             except: pass
 
+    def repair(self):
+        adapters_dict = colab.pipe.get_list_adapters()
+        print(adapters_dict)
+        adapters = {x for module in adapters_dict.values() for x in module}
+        for a in adapters:
+            self.__cache[a] = None
+        self.on_load_event.invoke(None) #no need to call for each adapter, TODO argument
+
     @property
     def cache(self):
         return self.__cache
 
     @property
     def render_element(self):
-        return HBox([self.url_text, self.adapter_field, self.load_button])
+        return HBox([self.url_text, self.adapter_field, self.load_button, self.repair_button])
 
     def render(self):
         display(self.render_element)

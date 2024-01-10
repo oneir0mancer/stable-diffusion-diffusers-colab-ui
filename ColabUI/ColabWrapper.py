@@ -6,13 +6,15 @@ from .ArtistIndex import ArtistIndex
 from .HugginfaceModelIndex import HugginfaceModelIndex
 from .LoraDownloader import LoraDownloader
 from .LoraApplyer import LoraApplyer
+from .SettingsTabs import SettingsTabs
 
 class ColabWrapper:
     def __init__(self, output_dir: str):
         self.output_dir = output_dir
         self.output_index = 0
         self.cache = None
-        self.lora_cache = None
+        self.lora_cache = dict()
+        self.pipe = None
 
     def render_model_index(self, filepath: str):
         self.model_index = HugginfaceModelIndex(filepath)
@@ -29,6 +31,10 @@ class ColabWrapper:
         self.pipe.safety_checker = None
         self.pipe.enable_model_cpu_offload()
         self.pipe.enable_xformers_memory_efficient_attention()
+
+    def render_settings(self):
+        self.settings = SettingsTabs(self)
+        display(self.settings)
 
     def choose_sampler(self, sampler_name: str):
         config = self.pipe.scheduler.config
@@ -61,7 +67,7 @@ class ColabWrapper:
                 except: pass
 
     def render_lora_loader(self, output_dir="Lora"):
-        self.lora_downloader = LoraDownloader(self.pipe, output_dir, self.lora_cache)
+        self.lora_downloader = LoraDownloader(self.pipe, output_dir=output_dir, cache=self.lora_cache)
         self.lora_downloader.render()
 
     def render_lora_ui(self):

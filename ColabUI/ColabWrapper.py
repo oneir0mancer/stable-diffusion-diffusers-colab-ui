@@ -32,7 +32,7 @@ class ColabWrapper:
         self.pipe.enable_xformers_memory_efficient_attention()
 
     def render_settings(self):
-        self.settings = SettingsTabs(colab)
+        self.settings = SettingsTabs(self)
         display(self.settings)
 
     def choose_sampler(self, sampler_name: str):

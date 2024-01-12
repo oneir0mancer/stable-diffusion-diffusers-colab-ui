@@ -29,7 +29,6 @@ class ColabWrapper:
             custom_pipeline="lpw_stable_diffusion",
             torch_dtype=torch.float16).to("cuda")
         self.pipe.safety_checker = None
-        self.pipe.enable_model_cpu_offload()
         self.pipe.enable_xformers_memory_efficient_attention()
 
     def render_settings(self):

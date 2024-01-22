@@ -20,13 +20,13 @@ class ColabWrapper:
         self.model_index = HugginfaceModelIndex(filepath)
         self.model_index.render()
 
-    def load_model(self, pipeline_interface):
+    def load_model(self, pipeline_interface, custom_pipeline:str = "lpw_stable_diffusion"):
         model_id, from_ckpt = self.model_index.get_model_id()
         loader_func = pipeline_interface.from_single_file if from_ckpt else pipeline_interface.from_pretrained
 
         #TODO we can try catch here, and load file itself if diffusers doesn't want to load it for us
         self.pipe = loader_func(model_id,
-            custom_pipeline="lpw_stable_diffusion",
+            custom_pipeline=custom_pipeline,
             torch_dtype=torch.float16).to("cuda")
         self.pipe.safety_checker = None
         self.pipe.enable_xformers_memory_efficient_attention()

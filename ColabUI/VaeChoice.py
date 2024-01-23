@@ -1,3 +1,4 @@
+import os
 import torch
 from ipywidgets import Text, Layout, Button, HBox, VBox, Output
 from diffusers import AutoencoderKL
@@ -33,8 +34,9 @@ class VaeChoice:
             raise ValueError("VAE text field shouldn't be empty")
 
         if self.id_text.value.endswith(".safetensors"):
-            filepath = download_ckpt(self.id_text.value)    #TODO download dir
-            vae = AutoencoderKL.from_single_file(filepath, torch_dtype=torch.float16)
+            url = self.id_text.value
+            if not os.path.isfile(url): url = download_ckpt(url)    #TODO download dir
+            vae = AutoencoderKL.from_single_file(url, torch_dtype=torch.float16)
         else:
             if self.subfolder_text.value == "": 
                 raise ValueError("Subfolder text field shouldn't be empty when loading diffusers-style model")

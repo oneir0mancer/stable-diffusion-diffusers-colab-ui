@@ -33,14 +33,14 @@ class VaeChoice:
         if self.id_text.value == "": 
             raise ValueError("VAE text field shouldn't be empty")
 
-        if self.id_text.value.endswith(".safetensors"):
-            url = self.id_text.value
+        url = self.id_text.value
+        if url.endswith(".safetensors") or url.startswith("https://civitai.com/api/download/models/"):
             if not os.path.isfile(url): url = download_ckpt(url)    #TODO download dir
             vae = AutoencoderKL.from_single_file(url, torch_dtype=torch.float16)
         else:
             if self.subfolder_text.value == "": 
                 raise ValueError("Subfolder text field shouldn't be empty when loading diffusers-style model")
-            vae = AutoencoderKL.from_pretrained(self.id_text.value, subfolder=self.subfolder_text.value, torch_dtype=torch.float16)
+            vae = AutoencoderKL.from_pretrained(url, subfolder=self.subfolder_text.value, torch_dtype=torch.float16)
 
         pipe.vae = vae.to("cuda")
         print(f"{self.id_text.value} VAE loaded")

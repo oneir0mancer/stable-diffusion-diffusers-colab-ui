@@ -5,4 +5,4 @@ peft
 pytorch-lightning
 safetensors
 transformers
-xformers==0.0.21
+xformers

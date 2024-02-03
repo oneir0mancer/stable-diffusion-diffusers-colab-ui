@@ -1,32 +1,29 @@
-# Stable Diffusion with Colab UI
+# Colab UI for Stable Diffusion
 
 Txt2Img: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/oneir0mancer/stable-diffusion-diffusers-colab-ui/blob/main/sd_diffusers_colab_ui.ipynb)
 
 Img2Img: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/oneir0mancer/stable-diffusion-diffusers-colab-ui/blob/main/sd_diffusers_img2img_ui.ipynb)
 
-SDXL:  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/oneir0mancer/stable-diffusion-diffusers-colab-ui/blob/main/SDXL_diffusers_ui.ipynb)
+Colab UI for running Stable Diffusion with 🤗 diffusers library.
 
-This repository aims to emulate WebUI using just Colab and IPython widgets, without running a web server. 
-Since Google Colab [seems to prohibit](https://github.com/googlecolab/colabtools/issues/3591) running gradio WebUI, this may be a good alternative.
+This repository aims to create a GUI using native Colab and IPython widgets. 
+This eliminates the need for gradio WebUI, which [seems to be prohibited](https://github.com/googlecolab/colabtools/issues/3591) now on Google Colab.
 
 ![UI example](docs/ui-example.jpg)
 
-<details>
- <summary>Note</summary>
-I use diffusers library to run stable diffusion, which has some problems with importing models in Automatic1111 format. So it may take some work to load a particular model.
-</details>
-
-### Plans:
+### Features:
  - [X] UI based on IPython Widgets
- - [X] Load models from huggingface
- - [X] Index of popular huggingface models
+ - [X] Stable diffusion 1.x, 2.x, XL
+ - [X] Load models in from Huggingface, and models in Automatic1111 (ckpt/safetensors) format
  - [X] Change VAE and sampler
  - [X] Load textual inversions
- - [x] Load models in Automatic1111 (ckpt/safetensors) format
  - [x] Load LoRAs
  - [x] Img2Img
- - [ ] Image mixing
  - [ ] Inpainting
+
+### SDXL
+SDXL is supported to an extent. You can load huggingface models, but loading models in A1111 format may be impossible because of RAM limitation.
+Also it looks like textual inversions and loading LoRAs is not supported for SDXL.
 
 ## Kandinsky
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/oneir0mancer/stable-diffusion-diffusers-colab-ui/blob/main/sd_kandinsky_colab_ui.ipynb)

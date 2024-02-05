@@ -1,19 +1,20 @@
 {
-	"Deliberate" : { "id" : "XpucT/Deliberate" },
+	"Stable Diffusion v1.5" : { "id" : "runwayml/stable-diffusion-v1-5" },
+    "Stable Diffusion XL" : { "id" : "stabilityai/stable-diffusion-xl-base-1.0" },
+    "Animagine XL" : { "id" : "cagliostrolab/animagine-xl-3.0" },
+    "Pony Diffusion XL" : { "id" : "kitty7779/ponyDiffusionV6XL" },
+    "Counterfeit-V2.5" : { "id" : "gsdf/Counterfeit-V2.5" },
 	"Analog Diffusion" : { "id" : "wavymulder/Analog-Diffusion", "trigger": "analog style" },
 	"Dreamlike Diffusion" : { "id" : "dreamlike-art/dreamlike-diffusion-1.0", "trigger": "dreamlikeart" },
 	"Dreamlike Photoreal 2.0" : { "id" : "dreamlike-art/dreamlike-photoreal-2.0" },
 	"Openjourney v4" : { "id" : "prompthero/openjourney-v4" },
-	"Counterfeit-V2.5" : { "id" : "gsdf/Counterfeit-V2.5" },
 	"Pastel Mix" : { "id" : "andite/pastel-mix" },
 	"Pony Diffusion v4" : { "id" : "AstraliteHeart/pony-diffusion-v4" },
-	"Anything v3.0" : { "id" : "Linaqruf/anything-v3.0" },
-	"Anything v4.0 mix" : { "id" : "andite/anything-v4.0" },
 	"ACertainThing" : { "id" : "JosephusCheung/ACertainThing" },
 	"BPModel" : { "id" : "Crosstyan/BPModel" },
 	"SomethingV2.2" : { "id" : "NoCrypt/SomethingV2_2" },
+    "Anything v3.0" : { "id" : "Linaqruf/anything-v3.0" },
+	"Anything v4.0 mix" : { "id" : "andite/anything-v4.0" },
 	"Waifu Diffusion v1.4 " : { "id" : "hakurei/waifu-diffusion" },
-	"Waifu Diffusion v1.5 " : { "id" : "waifu-diffusion/wd-1-5-beta3" },
-	"Stable Diffusion v1.5" : { "id" : "runwayml/stable-diffusion-v1-5" },
-	"Stable Diffusion v1.4" : { "id" : "CompVis/stable-diffusion-v1-4" }
+	"Waifu Diffusion v1.5 " : { "id" : "waifu-diffusion/wd-1-5-beta3" }
 }

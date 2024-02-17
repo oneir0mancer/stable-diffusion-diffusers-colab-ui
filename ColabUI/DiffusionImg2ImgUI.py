@@ -43,7 +43,7 @@ class DiffusionImg2ImgUI(BaseUI):
         if init_image is None: init_image = self._current_image
 
         g = torch.cuda.manual_seed(seed)
-        self._metadata = self._get_metadata_string() + f"Seed: {seed} "
+        self._metadata = self.get_metadata_string() + f"Seed: {seed} "
 
         init_image = init_image.convert('RGB')
         init_image = init_image.resize((self.width_field.value, self.height_field.value), resample=Image.BILINEAR)

@@ -62,7 +62,7 @@ class BaseUI:
     def metadata(self):
         return self._metadata 
     
-    def _get_metadata_string(self):
+    def get_metadata_string(self):
         return f"\nPrompt: {self.positive_prompt.value}\nNegative: {self.negative_prompt.value}\nCGF: {self.cfg_field.value} Steps {self.steps_field.value} "
         
     def get_dict_to_cache(self):

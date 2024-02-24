@@ -27,8 +27,8 @@ class Img2ImgRefinerUI:
         
     def generate(self, pipe, init_image=None, generator=None):
         """Generate images given Img2Img Pipeline, and settings set in Base UI and Refiner UI."""
-        if self.ui.seed_field.value >= 0: 
-            seed = self.ui.seed_field.value
+        if self.__base_ui.seed_field.value >= 0: 
+            seed = self.__base_ui.seed_field.value
         else:
             seed = self.__generator.seed()
             
@@ -41,14 +41,14 @@ class Img2ImgRefinerUI:
         init_image = init_image.resize(size, resample=Image.LANCZOS)
         
         g = torch.cuda.manual_seed(seed)
-        self._metadata = self.ui.get_metadata_string() + f"\nImg2Img Seed: {seed}, Noise Strength: {self.strength_field.value}, Upscale: {self.upscale_field.value} "
+        self._metadata = self.__base_ui.get_metadata_string() + f"\nImg2Img Seed: {seed}, Noise Strength: {self.strength_field.value}, Upscale: {self.upscale_field.value} "
         
         results = pipe(image=init_image,
-                       prompt=self.ui.positive_prompt.value, 
-                       negative_prompt=self.ui.negative_prompt.value, 
-                       num_inference_steps=self.ui.steps_field.value,
-                       num_images_per_prompt = self.ui.batch_field.value,
-                       guidance_scale=self.ui.cfg_field.value, 
+                       prompt=self.__base_ui.positive_prompt.value, 
+                       negative_prompt=self.__base_ui.negative_prompt.value, 
+                       num_inference_steps=self.__base_ui.steps_field.value,
+                       num_images_per_prompt = self.__base_ui.batch_field.value,
+                       guidance_scale=self.__base_ui.cfg_field.value, 
                        strength=self.strength_field.value,
                        generator=g)
         return results

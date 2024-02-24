@@ -2,7 +2,7 @@
 	"Stable Diffusion v1.5" : { "id" : "runwayml/stable-diffusion-v1-5" },
     "Stable Diffusion XL" : { "id" : "stabilityai/stable-diffusion-xl-base-1.0" },
     "Animagine XL" : { "id" : "cagliostrolab/animagine-xl-3.0" },
-    "Pony Diffusion XL" : { "id" : "kitty7779/ponyDiffusionV6XL" },
+    "Pony Diffusion XL" : { "id" : "stablediffusionapi/pony-diffusion-v6-xl" },
     "Counterfeit-V2.5" : { "id" : "gsdf/Counterfeit-V2.5" },
 	"Analog Diffusion" : { "id" : "wavymulder/Analog-Diffusion", "trigger": "analog style" },
 	"Dreamlike Diffusion" : { "id" : "dreamlike-art/dreamlike-diffusion-1.0", "trigger": "dreamlikeart" },

@@ -7,6 +7,7 @@ from .HugginfaceModelIndex import HugginfaceModelIndex
 from .LoraDownloader import LoraDownloader
 from .LoraApplyer import LoraApplyer
 from .SettingsTabs import SettingsTabs
+from .Img2ImgRefinerUI import Img2ImgRefinerUI
 
 class ColabWrapper:
     def __init__(self, output_dir: str):
@@ -15,6 +16,7 @@ class ColabWrapper:
         self.cache = None
         self.lora_cache = dict()
         self.pipe = None
+        self.custom_pipeline = None
 
     def render_model_index(self, filepath: str):
         self.model_index = HugginfaceModelIndex(filepath)
@@ -23,6 +25,8 @@ class ColabWrapper:
     def load_model(self, pipeline_interface, custom_pipeline:str = "lpw_stable_diffusion"):
         model_id, from_ckpt = self.model_index.get_model_id()
         loader_func = pipeline_interface.from_single_file if from_ckpt else pipeline_interface.from_pretrained
+
+        self.custom_pipeline = custom_pipeline
 
         #TODO we can try catch here, and load file itself if diffusers doesn't want to load it for us
         self.pipe = loader_func(model_id,
@@ -94,3 +98,21 @@ class ColabWrapper:
 
         if display_previewes:
             self.ui.display_image_previews(results.images)
+ 
+    #StableDiffusionXLImg2ImgPipeline
+    def render_refiner_ui(self, pipeline_interface):
+        components = self.pipe.components
+        self.img2img_pipe = pipeline_interface(**components)
+        
+        self.refiner_ui = Img2ImgRefinerUI(self.ui)
+        self.refiner_ui.render()
+
+    def refiner_generate(self, output_dir: str = None, display_previewes: bool = False):
+        results = self.refiner_ui.generate(self.img2img_pipe)
+        
+        if output_dir is None: output_dir = self.output_dir
+        for i, image in enumerate(results.images):
+            path = os.path.join(output_dir, f"{self.output_index:05}.png")
+            self.ui.save_image_with_metadata(image, path, f"Batch: {i}\n")  #TODO move this func to utils, add path to tooltip
+            print(path)
+            self.output_index += 1

@@ -6,7 +6,7 @@ class KandinskyUI(BaseUI):
         if self.seed_field.value > 0:
             torch.manual_seed(self.seed_field.value)
 
-        self._metadata = self._get_metadata_string() + f"Seed: {self.seed_field.value} "
+        self._metadata = self.get_metadata_string() + f"Seed: {self.seed_field.value} "
 
         images = model.generate_text2img(self.positive_prompt.value,
                                  negative_prior_prompt = self.negative_prompt.value,

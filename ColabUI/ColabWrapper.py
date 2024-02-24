@@ -102,7 +102,7 @@ class ColabWrapper:
     #StableDiffusionXLImg2ImgPipeline
     def render_refiner_ui(self, pipeline_interface):
         components = self.pipe.components
-        self.img2img_pipe = pipeline_interface(custom_pipeline=self.custom_pipeline, **components)  #TODO test
+        self.img2img_pipe = pipeline_interface(**components)
         
         self.refiner_ui = Img2ImgRefinerUI(self.ui)
         self.refiner_ui.render()

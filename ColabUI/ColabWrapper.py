@@ -8,6 +8,7 @@ from .LoraDownloader import LoraDownloader
 from .LoraApplyer import LoraApplyer
 from .SettingsTabs import SettingsTabs
 from .Img2ImgRefinerUI import Img2ImgRefinerUI
+from ..utils.preview import get_image_previews
 
 class ColabWrapper:
     def __init__(self, output_dir: str):
@@ -86,18 +87,19 @@ class ColabWrapper:
         self.flair = ArtistIndex(ui, artist_index)
         self.flair.render()
 
-    def generate(self, save_images: bool, display_previewes: bool):
+    def generate(self, display_previewes: bool = True):
         self.cache = self.ui.get_dict_to_cache()
-        results = self.ui.generate(self.pipe)
-        if save_images:
+        paths = []
+        
+        for sample in range(self.ui.sample_count):
+            results = self.ui.generate(self.pipe)        
             for i, image in enumerate(results.images):
                 path = os.path.join(self.output_dir, f"{self.output_index:05}.png")
                 self.ui.save_image_with_metadata(image, path, f"Batch: {i}\n")
-                print(path)
                 self.output_index += 1
-
+        
         if display_previewes:
-            self.ui.display_image_previews(results.images)
+            get_image_previews(paths, 512, 512)
  
     #StableDiffusionXLImg2ImgPipeline
     def render_refiner_ui(self, pipeline_interface):

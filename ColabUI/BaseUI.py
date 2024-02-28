@@ -16,7 +16,7 @@ class BaseUI:
         self.cfg_field = FloatSlider(value=7, min=1, max=20, step=0.5, description="CFG: ")
         self.seed_field = IntText(value=-1, description="seed: ")
         self.batch_field = IntText(value=1, layout=Layout(width='150px'), description="Batch size ")
-        self.count_field = IntText(value=1, layout=Layout(width='150px'), description="Batch count ")
+        self.count_field = IntText(value=1, layout=Layout(width='150px'), description="Sample count ")
         
     def render(self):
         """Render UI widgets."""
@@ -31,27 +31,13 @@ class BaseUI:
         swap_btn.on_click(swap_dims)
 
         size_box = HBox([self.width_field, self.height_field, swap_btn])
-        batch_box = HBox([self.batch_field])
+        batch_box = HBox([self.batch_field, self.count_field])
 
         display(HBox([l1, l2]), prompts, size_box, self.steps_field, self.cfg_field, self.seed_field, batch_box)
         
     def get_size(self):
         """Get current (width, height) values"""
         return (self.width_field.value, self.height_field.value)
-        
-    def display_image_previews(self, images):
-        width, height = self.get_size()
-        wgts = []
-        for image in images:
-            img_byte_arr = io.BytesIO()
-            image.save(img_byte_arr, format='PNG')
-            wgt = widgets.Image(
-                value=img_byte_arr.getvalue(),
-                width=width/2,
-                height=height/2,
-            )
-            wgts.append(wgt)
-        display(HBox(wgts))
         
     def save_image_with_metadata(self, image, path, additional_data = ""):
         meta = PngInfo()
@@ -60,7 +46,11 @@ class BaseUI:
         
     @property
     def metadata(self):
-        return self._metadata 
+        return self._metadata
+
+    @property
+    def sample_count(self):
+        return self.count_field.value
     
     def get_metadata_string(self):
         return f"\nPrompt: {self.positive_prompt.value}\nNegative: {self.negative_prompt.value}\nCGF: {self.cfg_field.value} Steps {self.steps_field.value} "

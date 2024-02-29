@@ -97,9 +97,12 @@ class ColabWrapper:
                 path = os.path.join(self.output_dir, f"{self.output_index:05}.png")
                 self.ui.save_image_with_metadata(image, path, f"Batch: {i}\n")
                 self.output_index += 1
+                paths.append(path)
         
         if display_previewes:
-            get_image_previews(paths, 512, 512)
+            display(get_image_previews(paths, 512, 512))
+            
+        return paths
  
     #StableDiffusionXLImg2ImgPipeline
     def render_refiner_ui(self, pipeline_interface):

@@ -8,16 +8,21 @@ from .LoraDownloader import LoraDownloader
 from .LoraApplyer import LoraApplyer
 from .SettingsTabs import SettingsTabs
 from .Img2ImgRefinerUI import Img2ImgRefinerUI
-from ..utils.preview import get_image_previews
+from ..utils.preview import get_image_previews, try_create_dir
 
 class ColabWrapper:
-    def __init__(self, output_dir: str):
+    def __init__(self, output_dir: str = "outputs/txt2img",
+                 favourite_dir: str = "outputs/favourite"):
         self.output_dir = output_dir
+        self.favourite_dir = favourite_dir
         self.output_index = 0
         self.cache = None
         self.lora_cache = dict()
         self.pipe = None
         self.custom_pipeline = None
+        
+        try_create_dir(output_dir)
+        try_create_dir(favourite_dir)
 
     def render_model_index(self, filepath: str):
         self.model_index = HugginfaceModelIndex(filepath)
@@ -100,7 +105,7 @@ class ColabWrapper:
                 paths.append(path)
         
         if display_previewes:
-            display(get_image_previews(paths, 512, 512))
+            display(get_image_previews(paths, 512, 512, favourite_dir=self.favourite_dir))
             
         return paths
  

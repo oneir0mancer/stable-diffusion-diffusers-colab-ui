@@ -17,6 +17,7 @@ class BaseUI:
         self.seed_field = IntText(value=-1, description="seed: ")
         self.batch_field = IntText(value=1, layout=Layout(width='150px'), description="Batch size ")
         self.count_field = IntText(value=1, layout=Layout(width='150px'), description="Sample count ")
+        self.clip_skip = None
         
     def render(self):
         """Render UI widgets."""

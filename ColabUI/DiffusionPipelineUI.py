@@ -21,6 +21,6 @@ class DiffusionPipelineUI(BaseUI):
                        num_inference_steps=self.steps_field.value,
                        num_images_per_prompt = self.batch_field.value,
                        guidance_scale=self.cfg_field.value, 
-                       generator=g, 
+                       generator=g, clip_skip=self.clip_skip,
                        height=self.height_field.value, width=self.width_field.value)
         return results

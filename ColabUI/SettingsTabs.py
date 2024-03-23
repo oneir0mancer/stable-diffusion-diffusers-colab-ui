@@ -35,7 +35,7 @@ class SettingsTabs:
         self.accordion.selected_index = None
     
     def __general_settings(self):
-        clip_slider = IntSlider(value=0, min=0, max=4, description="Clip Skip")
+        clip_slider = IntSlider(value=self.colab.ui.clip_skip, min=0, max=4, description="Clip Skip")
         def clip_value_changed(change):
             self.output.clear_output()
             with self.output:
@@ -54,6 +54,7 @@ class SettingsTabs:
                     print(f"Favourites foulder changed to {change.new}")
                 else:
                     t.description = highlight("Favourites:", color="red")
+        favourite_dir.observe(favourite_value_changed, "value")
 
         return VBox([clip_slider, favourite_dir])
     

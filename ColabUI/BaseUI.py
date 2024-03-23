@@ -12,7 +12,7 @@ class BaseUI:
         self.negative_prompt = Textarea(placeholder='Negative prompt...', layout=Layout(width="50%"))
         self.width_field = IntText(value=512, layout=Layout(width='200px'), description="width: ")
         self.height_field = IntText(value=768, layout=Layout(width='200px'), description="height: ")
-        self.steps_field = IntSlider(value=20, min=1, max=100, description="Steps: ")
+        self.steps_field = IntSlider(value=25, min=1, max=100, description="Steps: ")
         self.cfg_field = FloatSlider(value=7, min=1, max=20, step=0.5, description="CFG: ")
         self.seed_field = IntText(value=-1, description="seed: ")
         self.batch_field = IntText(value=1, layout=Layout(width='150px'), description="Batch size ")

@@ -42,8 +42,8 @@ class ColabWrapper:
         self.pipe.enable_xformers_memory_efficient_attention()
 
     def render_settings(self):
-        self.settings = SettingsTabs(self)
-        display(self.settings)
+        #TODO settings ui is moved
+        pass
 
     def choose_sampler(self, sampler_name: str):
         config = self.pipe.scheduler.config
@@ -86,13 +86,17 @@ class ColabWrapper:
     def render_generation_ui(self, ui, artist_index: str = None):
         self.ui = ui
         if (self.cache is not None): self.ui.load_cache(self.cache)
-        self.ui.render()
+        
+        self.settings = SettingsTabs(self)
         
         if artist_index is None: artist_index = "/content/StableDiffusionUi/artist_index.json"
         self.flair = ArtistIndex(ui, artist_index)
+        
+        self.settings.render()
+        self.ui.render()
         self.flair.render()
 
-    def generate(self, display_previewes: bool = True):
+    def generate(self):
         self.cache = self.ui.get_dict_to_cache()
         paths = []
         
@@ -104,7 +108,7 @@ class ColabWrapper:
                 self.output_index += 1
                 paths.append(path)
         
-        if display_previewes:
+        if self.settings.display_previews:
             display(get_image_previews(paths, 512, 512, favourite_dir=self.favourite_dir))
             
         return paths

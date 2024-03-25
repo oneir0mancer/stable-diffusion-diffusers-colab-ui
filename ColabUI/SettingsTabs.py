@@ -1,8 +1,9 @@
-from ipywidgets import Button, Tab, VBox, Output, Accordion, IntSlider, Text
-from .SamplerChoice import SamplerChoice   #TODO
+from ipywidgets import Button, Tab, VBox, Output, Accordion, IntSlider, Text, Checkbox
+from .SamplerChoice import SamplerChoice
 from .VaeChoice import VaeChoice
 from .TextualInversionChoice import TextualInversionChoice
 from .LoraChoice import LoraChoice
+import os
 
 class SettingsTabs:
     #TODO config file, default import file
@@ -35,6 +36,8 @@ class SettingsTabs:
         self.accordion.selected_index = None
     
     def __general_settings(self):
+        self.show_preview_checkbox = Checkbox(value=True, description="Show output previews")
+
         clip_slider = IntSlider(value=self.colab.ui.clip_skip, min=0, max=4, description="Clip Skip")
         def clip_value_changed(change):
             self.output.clear_output()
@@ -50,18 +53,22 @@ class SettingsTabs:
             with self.output:
                 if (os.path.isdir(change.new)):
                     self.colab.favourite_dir = change.new
-                    t.description = "Favourites:"
+                    favourite_dir.description = "Favourites:"
                     print(f"Favourites foulder changed to {change.new}")
                 else:
-                    t.description = highlight("Favourites:", color="red")
+                    favourite_dir.description = self.highlight("Favourites:", color="red")
         favourite_dir.observe(favourite_value_changed, "value")
 
-        return VBox([clip_slider, favourite_dir])
+        return VBox([self.show_preview_checkbox, favourite_dir, clip_slider])
     
     @staticmethod
     def highlight(str_to_highlight: str, color: str = "red") -> str:
         return f"<font color='{color}'>{str_to_highlight}</font>"
     
+    @property
+    def display_previews(self):
+        return self.show_preview_checkbox.value
+
     @property
     def render_element(self): 
         return self.accordion

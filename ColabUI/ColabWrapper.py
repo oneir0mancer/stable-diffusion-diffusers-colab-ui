@@ -66,7 +66,8 @@ class ColabWrapper:
         for path, subdirs, files in os.walk(root_folder):
             for name in files:
                 try:
-                    if os.path.splitext(name)[1] != ".pt": continue
+                    ext = os.path.splitext(name)[1]
+                    if ext != ".pt" and ext != ".safetensors": continue
                     self.pipe.load_textual_inversion(path, weight_name=name)
                     print(path, name)
                 except: pass

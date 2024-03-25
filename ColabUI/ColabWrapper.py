@@ -36,14 +36,10 @@ class ColabWrapper:
 
         #TODO we can try catch here, and load file itself if diffusers doesn't want to load it for us
         self.pipe = loader_func(model_id,
-            custom_pipeline=custom_pipeline,
+            custom_pipeline=self.custom_pipeline,
             torch_dtype=torch.float16).to("cuda")
         self.pipe.safety_checker = None
         self.pipe.enable_xformers_memory_efficient_attention()
-
-    def render_settings(self):
-        #TODO settings ui is moved
-        pass
 
     def choose_sampler(self, sampler_name: str):
         config = self.pipe.scheduler.config

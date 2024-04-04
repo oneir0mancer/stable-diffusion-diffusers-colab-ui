@@ -12,7 +12,7 @@ class Img2ImgRefinerUI:
         self.__generator = torch.Generator(device="cuda")
         self.__base_ui = ui
         self.__current_file = ""
-        self.__current_img = ""
+        self.__current_img = None
         self.__preview_visible = True
         
         self.strength_field = FloatSlider(value=0.35, min=0, max=1, step=0.05, description="Strength: ")
@@ -38,6 +38,7 @@ class Img2ImgRefinerUI:
         self.hide_button.on_click(hide_handler)
 
         def on_slider_change(change):
+            if self.__current_img is None: return
             self.size_label.value = f"{self.__current_img.size} → {self.get_upscaled_size(self.__current_img.size)}"
         self.upscale_field.observe(on_slider_change, 'value')
         

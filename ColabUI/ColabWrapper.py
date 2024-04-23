@@ -11,9 +11,10 @@ from .Img2ImgRefinerUI import Img2ImgRefinerUI
 from ..utils.preview import get_image_previews, try_create_dir
 
 class ColabWrapper:
-    def __init__(self, output_dir: str = "outputs/txt2img",
+    def __init__(self, output_dir: str = "outputs/txt2img", img2img_dir: str = "outputs/img2img",
                  favourite_dir: str = "outputs/favourite"):
         self.output_dir = output_dir
+        self.img2img_dir = img2img_dir
         self.favourite_dir = favourite_dir
         self.output_index = 0
         self.cache = None
@@ -107,9 +108,9 @@ class ColabWrapper:
         
         if self.settings.display_previews:
             display(get_image_previews(paths, 512, 512, favourite_dir=self.favourite_dir))
-            
+        
         return paths
- 
+
     #StableDiffusionXLImg2ImgPipeline
     def render_refiner_ui(self, pipeline_interface):
         components = self.pipe.components
@@ -120,10 +121,15 @@ class ColabWrapper:
 
     def refiner_generate(self, output_dir: str = None, display_previewes: bool = False):
         results = self.refiner_ui.generate(self.img2img_pipe)
+        paths = []
         
-        if output_dir is None: output_dir = self.output_dir
+        if output_dir is None: output_dir = self.img2img_dir
         for i, image in enumerate(results.images):
             path = os.path.join(output_dir, f"{self.output_index:05}.png")
-            self.ui.save_image_with_metadata(image, path, f"Batch: {i}\n")  #TODO move this func to utils, add path to tooltip
-            print(path)
+            self.refiner_ui.save_image_with_metadata(image, path, f"Batch: {i}\n")  #TODO move this func to utils, add path to tooltip
             self.output_index += 1
+            paths.append(path)
+        
+        if self.settings.display_previews:
+            display(get_image_previews(paths, 512, 512, favourite_dir=self.favourite_dir))
+        return paths

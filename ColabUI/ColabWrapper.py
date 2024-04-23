@@ -9,6 +9,7 @@ from .LoraApplyer import LoraApplyer
 from .SettingsTabs import SettingsTabs
 from .Img2ImgRefinerUI import Img2ImgRefinerUI
 from ..utils.preview import get_image_previews, try_create_dir
+from ..utils.image_utils import save_image_with_metadata
 
 class ColabWrapper:
     def __init__(self, output_dir: str = "outputs/txt2img", img2img_dir: str = "outputs/img2img",
@@ -94,6 +95,9 @@ class ColabWrapper:
         self.ui.render()
         self.flair.render()
 
+    def restore_cached_ui(self):
+        if (self.cache is not None): self.ui.load_cache(self.cache)
+
     def generate(self):
         self.cache = self.ui.get_dict_to_cache()
         paths = []
@@ -102,7 +106,7 @@ class ColabWrapper:
             results = self.ui.generate(self.pipe)        
             for i, image in enumerate(results.images):
                 path = os.path.join(self.output_dir, f"{self.output_index:05}.png")
-                self.ui.save_image_with_metadata(image, path, f"Batch: {i}\n")
+                save_image_with_metadata(image, path, self.ui, f"Batch: {i}\n")
                 self.output_index += 1
                 paths.append(path)
         
@@ -126,7 +130,7 @@ class ColabWrapper:
         if output_dir is None: output_dir = self.img2img_dir
         for i, image in enumerate(results.images):
             path = os.path.join(output_dir, f"{self.output_index:05}.png")
-            self.refiner_ui.save_image_with_metadata(image, path, f"Batch: {i}\n")  #TODO move this func to utils, add path to tooltip
+            save_image_with_metadata(image, path, self.refiner_ui, f"Batch: {i}\n")
             self.output_index += 1
             paths.append(path)
         

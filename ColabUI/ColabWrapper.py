@@ -2,7 +2,7 @@ import os
 import torch
 from diffusers import EulerAncestralDiscreteScheduler, DPMSolverMultistepScheduler, UniPCMultistepScheduler
 from diffusers import AutoencoderKL
-from .ArtistIndex import ArtistIndex
+from .FlairView import FlairView
 from .HugginfaceModelIndex import HugginfaceModelIndex
 from .LoraDownloader import LoraDownloader
 from .LoraApplyer import LoraApplyer
@@ -43,20 +43,6 @@ class ColabWrapper:
         self.pipe.safety_checker = None
         self.pipe.enable_xformers_memory_efficient_attention()
 
-    def choose_sampler(self, sampler_name: str):
-        config = self.pipe.scheduler.config
-        match sampler_name:
-            case "Euler A": sampler = EulerAncestralDiscreteScheduler.from_config(config)
-            case "DPM++": sampler = DPMSolverMultistepScheduler.from_config(config)
-            case "DPM++ Karras":
-                sampler = DPMSolverMultistepScheduler.from_config(config)
-                sampler.use_karras_sigmas = True
-            case "UniPC":
-                sampler = UniPCMultistepScheduler.from_config(config)
-            case _: print("Unknown sampler")
-        self.pipe.scheduler = sampler
-        print(f"Sampler '{sampler_name}' chosen")
-
     def load_vae(self, id_or_path: str, subfolder: str):
         vae = AutoencoderKL.from_pretrained(id_or_path, subfolder=subfolder, torch_dtype=torch.float16).to("cuda")
         self.pipe.vae = vae
@@ -82,14 +68,13 @@ class ColabWrapper:
         self.lora_ui = LoraApplyer(self.pipe, self.lora_downloader)
         self.lora_ui.render()
 
-    def render_generation_ui(self, ui, artist_index: str = None):
+    def render_generation_ui(self, ui):
         self.ui = ui
         if (self.cache is not None): self.ui.load_cache(self.cache)
         
         self.settings = SettingsTabs(self)
         
-        if artist_index is None: artist_index = "/content/StableDiffusionUi/artist_index.json"
-        self.flair = ArtistIndex(ui, artist_index)
+        self.flair = FlairView(ui)
         
         self.settings.render()
         self.ui.render()

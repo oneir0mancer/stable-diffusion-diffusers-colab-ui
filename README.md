@@ -16,7 +16,7 @@ This eliminates the need for gradio WebUI, which [seems to be prohibited](https:
  - [X] Change VAE and sampler
  - [X] Load textual inversions
  - [x] Load LoRAs
- - [x] Img2Img: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/oneir0mancer/stable-diffusion-diffusers-colab-ui/blob/main/sd_diffusers_img2img_ui.ipynb)
+ - [x] Img2Img
  - [ ] Inpainting
 
 ### SDXL

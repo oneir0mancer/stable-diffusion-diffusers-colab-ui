@@ -1,10 +1,11 @@
+import io
+import ipywidgets as widgets    #PIL.Image vs ipywidgets.Image
+import numpy as np
+import os
 import torch
 from IPython.display import display
 from ipywidgets import FloatSlider, Dropdown, HBox, VBox, Text, Button, Label
 from PIL import Image
-import ipywidgets as widgets
-import io
-import os
 from .BaseUI import BaseUI
 from ..utils.image_utils import load_image_metadata
 
@@ -59,8 +60,7 @@ class Img2ImgRefinerUI:
             seed = self.__generator.seed()
             
         if init_image is None:
-            if not os.path.isfile(self.__current_file): return
-            init_image = Image.open(self.__current_file)
+            init_image = self.__current_img
         
         init_image = init_image.convert('RGB')
         size = self.get_upscaled_size(init_image.size)
@@ -88,10 +88,30 @@ class Img2ImgRefinerUI:
     def get_upscaled_size(self, size):
         return (int(self.upscale_field.value * size[0]), int(self.upscale_field.value * size[1]))
 
+    def __create_color_picker(self):
+        picker = widgets.ColorPicker(description='Pick a color', value='#000000', concise=False)
+        btn = Button(description = "Apply")
+        def load_color_handler(b):
+            h = picker.value.lstrip('#')
+            rgb = tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
+            x = np.tile(rgb, (768, 512, 1)).astype(np.uint8)
+            self.__current_img = Image.fromarray(x)
+            self.size_label.value = f"{self.__current_img.size} → {self.get_upscaled_size(self.__current_img.size)}"
+            f = io.BytesIO()
+            self.__current_img.save(f, "png")
+            self.image_preview.value = f.getvalue()
+        btn.on_click(load_color_handler)
+        
+        foldout = widgets.Accordion(children=[HBox([picker, btn])])
+        foldout.set_title(0, "From solid color")
+        foldout.selected_index = None
+        return foldout
+
     @property
     def render_element(self): 
         return VBox([self.strength_field, self.upscale_field, 
                      HBox([self.path_field, self.load_button, self.load_prompts_button]), 
+                     self.__create_color_picker(),
                      self.size_label, self.image_preview, self.hide_button])
 
     def render(self):

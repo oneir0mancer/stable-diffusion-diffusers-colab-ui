@@ -92,10 +92,7 @@ class Img2ImgRefinerUI:
         picker = widgets.ColorPicker(description='Pick a color', value='#000000', concise=False)
         btn = Button(description = "Apply")
         def load_color_handler(b):
-            h = picker.value.lstrip('#')
-            rgb = tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
-            x = np.tile(rgb, (768, 512, 1)).astype(np.uint8)
-            self.__current_img = Image.fromarray(x)
+            self.__current_img = self.__create_image_from_color(picker)
             self.size_label.value = f"{self.__current_img.size} → {self.get_upscaled_size(self.__current_img.size)}"
             f = io.BytesIO()
             self.__current_img.save(f, "png")
@@ -106,6 +103,14 @@ class Img2ImgRefinerUI:
         foldout.set_title(0, "From solid color")
         foldout.selected_index = None
         return foldout
+
+    def __create_image_from_color(self, picker):
+        h = picker.value.lstrip('#')
+        rgb = tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
+        width = int(self.__base_ui.width_field.value)
+        height = int(self.__base_ui.height_field.value)
+        x = np.tile(rgb, (height, width, 1)).astype(np.uint8)
+        return Image.fromarray(x)
 
     @property
     def render_element(self): 

@@ -75,6 +75,7 @@ class Img2ImgRefinerUI:
                        num_inference_steps=self.__base_ui.steps_field.value,
                        num_images_per_prompt = self.__base_ui.batch_field.value,
                        guidance_scale=self.__base_ui.cfg_field.value, 
+                       guidance_rescale=self.__base_ui.cfg_rescale,
                        strength=self.strength_field.value,
                        width=size[0], height=size[1],
                        generator=g)

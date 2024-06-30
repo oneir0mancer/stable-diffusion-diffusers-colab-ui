@@ -1,4 +1,4 @@
-from ipywidgets import Button, Tab, VBox, Output, Accordion, IntSlider, Text, Checkbox
+from ipywidgets import Button, Tab, VBox, Output, Accordion, IntSlider, Text, Checkbox, FloatSlider
 from .SamplerChoice import SamplerChoice
 from .VaeChoice import VaeChoice
 from .TextualInversionChoice import TextualInversionChoice
@@ -45,6 +45,12 @@ class SettingsTabs:
                 self.colab.ui.clip_skip = change.new
                 print(f"Clip Skip set to {change.new}")
         clip_slider.observe(clip_value_changed, "value")
+        
+        cfg_rescale_slider = FloatSlider(value=0, min=0, max=1, step = 0.05, description="CFG Rescale")
+        cfg_rescale_slider.description_tooltip = "Bigger value fixes contrast and overexposure"
+        def rescale_value_changed(change):
+            with self.output: self.colab.ui.cfg_rescale = change.new
+        cfg_rescale_slider.observe(rescale_value_changed, "value")
 
         favourite_dir = Text(placeholder="Path to folder", description="Favourites:")
         favourite_dir.value = self.colab.favourite_dir
@@ -59,7 +65,7 @@ class SettingsTabs:
                     favourite_dir.description = self.highlight("Favourites:", color="red")
         favourite_dir.observe(favourite_value_changed, "value")
 
-        return VBox([self.show_preview_checkbox, favourite_dir, clip_slider])
+        return VBox([self.show_preview_checkbox, favourite_dir, clip_slider, cfg_rescale_slider])
     
     @staticmethod
     def highlight(str_to_highlight: str, color: str = "red") -> str:

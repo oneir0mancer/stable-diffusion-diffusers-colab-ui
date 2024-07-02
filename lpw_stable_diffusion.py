@@ -834,7 +834,6 @@ class StableDiffusionLongPromptWeightingPipeline(
             guidance_rescale (`float`, *optional*, defaults to 0.0):
                 Guidance rescale factor from [Common Diffusion Noise Schedules and Sample Steps are Flawed](http://arxiv.org/pdf/2305.08891). 
                 Guidance rescale factor should fix overexposure when using zero terminal SNR.
-                NOTE: for now it is completely ignored.
             strength (`float`, *optional*, defaults to 0.8):
                 Conceptually, indicates how much to transform the reference `image`. Must be between 0 and 1.
                 `image` will be used as a starting point, adding more noise to it the larger the `strength`. The
@@ -1090,6 +1089,9 @@ class StableDiffusionLongPromptWeightingPipeline(
                 Paper](https://arxiv.org/pdf/2205.11487.pdf). Guidance scale is enabled by setting `guidance_scale >
                 1`. Higher guidance scale encourages to generate images that are closely linked to the text `prompt`,
                 usually at the expense of lower image quality.
+            guidance_rescale (`float`, *optional*, defaults to 0.0):
+                Guidance rescale factor from [Common Diffusion Noise Schedules and Sample Steps are Flawed](http://arxiv.org/pdf/2305.08891). 
+                Guidance rescale factor should fix overexposure when using zero terminal SNR.
             num_images_per_prompt (`int`, *optional*, defaults to 1):
                 The number of images to generate per prompt.
             eta (`float`, *optional*, defaults to 0.0):
@@ -1149,6 +1151,7 @@ class StableDiffusionLongPromptWeightingPipeline(
             width=width,
             num_inference_steps=num_inference_steps,
             guidance_scale=guidance_scale,
+            guidance_rescale = guidance_rescale,
             num_images_per_prompt=num_images_per_prompt,
             eta=eta,
             generator=generator,
@@ -1214,6 +1217,9 @@ class StableDiffusionLongPromptWeightingPipeline(
                 Paper](https://arxiv.org/pdf/2205.11487.pdf). Guidance scale is enabled by setting `guidance_scale >
                 1`. Higher guidance scale encourages to generate images that are closely linked to the text `prompt`,
                 usually at the expense of lower image quality.
+            guidance_rescale (`float`, *optional*, defaults to 0.0):
+                Guidance rescale factor from [Common Diffusion Noise Schedules and Sample Steps are Flawed](http://arxiv.org/pdf/2305.08891). 
+                Guidance rescale factor should fix overexposure when using zero terminal SNR.
             num_images_per_prompt (`int`, *optional*, defaults to 1):
                 The number of images to generate per prompt.
             eta (`float`, *optional*, defaults to 0.0):
@@ -1267,6 +1273,7 @@ class StableDiffusionLongPromptWeightingPipeline(
             image=image,
             num_inference_steps=num_inference_steps,
             guidance_scale=guidance_scale,
+            guidance_rescale = guidance_rescale,
             strength=strength,
             num_images_per_prompt=num_images_per_prompt,
             eta=eta,
@@ -1338,6 +1345,9 @@ class StableDiffusionLongPromptWeightingPipeline(
                 Paper](https://arxiv.org/pdf/2205.11487.pdf). Guidance scale is enabled by setting `guidance_scale >
                 1`. Higher guidance scale encourages to generate images that are closely linked to the text `prompt`,
                 usually at the expense of lower image quality.
+            guidance_rescale (`float`, *optional*, defaults to 0.0):
+                Guidance rescale factor from [Common Diffusion Noise Schedules and Sample Steps are Flawed](http://arxiv.org/pdf/2305.08891). 
+                Guidance rescale factor should fix overexposure when using zero terminal SNR.
             num_images_per_prompt (`int`, *optional*, defaults to 1):
                 The number of images to generate per prompt.
             add_predicted_noise (`bool`, *optional*, defaults to True):
@@ -1395,6 +1405,7 @@ class StableDiffusionLongPromptWeightingPipeline(
             mask_image=mask_image,
             num_inference_steps=num_inference_steps,
             guidance_scale=guidance_scale,
+            guidance_rescale = guidance_rescale,
             strength=strength,
             num_images_per_prompt=num_images_per_prompt,
             add_predicted_noise=add_predicted_noise,

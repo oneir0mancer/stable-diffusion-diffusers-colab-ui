@@ -783,6 +783,7 @@ class StableDiffusionLongPromptWeightingPipeline(
         width: int = 512,
         num_inference_steps: int = 50,
         guidance_scale: float = 7.5,
+        guidance_rescale: float = 0.0,
         strength: float = 0.8,
         num_images_per_prompt: Optional[int] = 1,
         add_predicted_noise: Optional[bool] = False,
@@ -830,6 +831,10 @@ class StableDiffusionLongPromptWeightingPipeline(
                 Paper](https://arxiv.org/pdf/2205.11487.pdf). Guidance scale is enabled by setting `guidance_scale >
                 1`. Higher guidance scale encourages to generate images that are closely linked to the text `prompt`,
                 usually at the expense of lower image quality.
+            guidance_rescale (`float`, *optional*, defaults to 0.0):
+                Guidance rescale factor from [Common Diffusion Noise Schedules and Sample Steps are Flawed](http://arxiv.org/pdf/2305.08891). 
+                Guidance rescale factor should fix overexposure when using zero terminal SNR.
+                NOTE: for now it is completely ignored.
             strength (`float`, *optional*, defaults to 0.8):
                 Conceptually, indicates how much to transform the reference `image`. Must be between 0 and 1.
                 `image` will be used as a starting point, adding more noise to it the larger the `strength`. The
@@ -1044,6 +1049,7 @@ class StableDiffusionLongPromptWeightingPipeline(
         width: int = 512,
         num_inference_steps: int = 50,
         guidance_scale: float = 7.5,
+        guidance_rescale: float = 0.0,
         num_images_per_prompt: Optional[int] = 1,
         eta: float = 0.0,
         generator: Optional[Union[torch.Generator, List[torch.Generator]]] = None,
@@ -1163,6 +1169,7 @@ class StableDiffusionLongPromptWeightingPipeline(
         strength: float = 0.8,
         num_inference_steps: Optional[int] = 50,
         guidance_scale: Optional[float] = 7.5,
+        guidance_rescale: Optional[float] = 0.0,
         num_images_per_prompt: Optional[int] = 1,
         eta: Optional[float] = 0.0,
         generator: Optional[Union[torch.Generator, List[torch.Generator]]] = None,
@@ -1281,6 +1288,7 @@ class StableDiffusionLongPromptWeightingPipeline(
         strength: float = 0.8,
         num_inference_steps: Optional[int] = 50,
         guidance_scale: Optional[float] = 7.5,
+        guidance_rescale: Optional[float] = 0.0,
         num_images_per_prompt: Optional[int] = 1,
         add_predicted_noise: Optional[bool] = False,
         eta: Optional[float] = 0.0,

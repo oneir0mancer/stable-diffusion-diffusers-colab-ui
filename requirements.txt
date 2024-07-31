@@ -1,3 +1,5 @@
+torch==2.3.0
+xformers==0.0.26.post1
 accelerate
 diffusers==0.29.1
 omegaconf
@@ -5,4 +7,3 @@ peft
 pytorch-lightning
 safetensors
 transformers
-xformers

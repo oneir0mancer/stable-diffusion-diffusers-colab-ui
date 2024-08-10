@@ -8,6 +8,7 @@ from .LoraDownloader import LoraDownloader
 from .LoraApplyer import LoraApplyer
 from .SettingsTabs import SettingsTabs
 from .Img2ImgRefinerUI import Img2ImgRefinerUI
+from .InpaintRefinerUI import InpaintRefinerUI
 from ..utils.preview import get_image_previews, try_create_dir
 from ..utils.image_utils import save_image_with_metadata
 
@@ -108,7 +109,7 @@ class ColabWrapper:
         self.refiner_ui = Img2ImgRefinerUI(self.ui)
         self.refiner_ui.render()
 
-    def refiner_generate(self, output_dir: str = None, display_previewes: bool = False):
+    def refiner_generate(self, output_dir: str = None):
         results = self.refiner_ui.generate(self.img2img_pipe)
         paths = []
         
@@ -116,6 +117,28 @@ class ColabWrapper:
         for i, image in enumerate(results.images):
             path = os.path.join(output_dir, f"{self.output_index:05}.png")
             save_image_with_metadata(image, path, self.refiner_ui, f"Batch: {i}\n")
+            self.output_index += 1
+            paths.append(path)
+        
+        if self.settings.display_previews:
+            display(get_image_previews(paths, 512, 512, favourite_dir=self.favourite_dir))
+        return paths
+
+    def render_inpaint_ui(self, pipeline_interface):
+        components = self.pipe.components
+        self.inpaint_pipe = pipeline_interface(**components)
+        
+        self.inpaint_ui = InpaintRefinerUI(self.ui)
+        self.inpaint_ui.render()
+
+    def inpaint_generate(self, output_dir: str = None):
+        results = self.inpaint_ui.generate(self.inpaint_pipe)
+        paths = []
+        
+        if output_dir is None: output_dir = self.img2img_dir
+        for i, image in enumerate(results.images):
+            path = os.path.join(output_dir, f"{self.output_index:05}.png")
+            save_image_with_metadata(image, path, self.inpaint_ui, f"Batch: {i}\n")
             self.output_index += 1
             paths.append(path)
         

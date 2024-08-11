@@ -17,7 +17,7 @@ This eliminates the need for gradio WebUI, which [seems to be prohibited](https:
  - [X] Load textual inversions
  - [x] Load LoRAs
  - [x] Img2Img
- - [ ] Inpainting
+ - [x] Inpainting
 
 ### SDXL
 SDXL is supported to an extent. You can load huggingface models, but loading models in A1111 format may be impossible because of RAM limitation.

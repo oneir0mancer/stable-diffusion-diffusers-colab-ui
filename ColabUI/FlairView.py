@@ -101,7 +101,7 @@ class FlairView:
         self.foldout = Accordion(children=[VBox([self.vbox, self.add_button, self.output, 
                                                  HBox(children=[self.clear_output_button],layout=right_align_layout)])])
         self.foldout.set_title(0, "Flair tags")
-        self.foldout.selected_index = None        
+        self.foldout.selected_index = None
 
     @property
     def render_element(self): 

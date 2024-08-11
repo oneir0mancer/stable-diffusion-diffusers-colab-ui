@@ -63,6 +63,11 @@ class InpaintRefinerUI:
                        width=size[0], height=size[1],
                        generator=g)
         return results
+
+    @property
+    def metadata(self):
+        return self._metadata 
+
     @property
     def render_element(self): 
         return VBox([self.strength_field, 

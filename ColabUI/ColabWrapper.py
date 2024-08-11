@@ -8,7 +8,6 @@ from .LoraDownloader import LoraDownloader
 from .LoraApplyer import LoraApplyer
 from .SettingsTabs import SettingsTabs
 from .Img2ImgRefinerUI import Img2ImgRefinerUI
-from .InpaintRefinerUI import InpaintRefinerUI
 from ..utils.preview import get_image_previews, try_create_dir
 from ..utils.image_utils import save_image_with_metadata
 
@@ -124,11 +123,11 @@ class ColabWrapper:
             display(get_image_previews(paths, 512, 512, favourite_dir=self.favourite_dir))
         return paths
 
-    def render_inpaint_ui(self, pipeline_interface):
+    def render_inpaint_ui(self, pipeline_interface, ui):
         components = self.pipe.components
         self.inpaint_pipe = pipeline_interface(**components)
         
-        self.inpaint_ui = InpaintRefinerUI(self.ui)
+        self.inpaint_ui = ui
         self.inpaint_ui.render()
 
     def inpaint_generate(self, output_dir: str = None):

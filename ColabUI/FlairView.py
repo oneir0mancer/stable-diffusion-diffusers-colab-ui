@@ -1,9 +1,10 @@
 import os
 import typing
 from IPython.display import display, Javascript
-from ipywidgets import Output, Text, Layout, Button, HBox, VBox, Dropdown, Accordion
+from ipywidgets import Output, Text, Layout, Button, HBox, VBox, Dropdown, Accordion, Checkbox
 from ..utils.empty_output import EmptyOutput
 from ..utils.downloader import download_ckpt
+from ..utils.ui import SwitchButton
 
 class FlairItem:
     __data : list[str]
@@ -13,6 +14,7 @@ class FlairItem:
         if out is None: out = EmptyOutput()
         self.out = out
         self.clipboard_output = Output()
+        self.index = index
 
         self.url_text = Text(placeholder="Path or url to load", layout=Layout(width="40%"))
         if index >= 0: self.url_text.description = f"{index + 1}:"
@@ -36,14 +38,21 @@ class FlairItem:
             self.ui.positive_prompt.value += f", by {self.flair_dropdown.value}"
         self.add_button.on_click(add_btn_click)
 
-        self.copy_button = Button(description='Copy', tooltip="Copy to clipboard", layout=Layout(width='80px'))
+        self.copy_button = Button(description="Copy", tooltip="Copy to clipboard", layout=Layout(width='80px'))
         def copy_event_handler(b):
             with self.clipboard_output:
                 text = self.flair_dropdown.value
                 display(Javascript(f"navigator.clipboard.writeText('{text}');")) 
         self.copy_button.on_click(copy_event_handler)
 
-        self.dropdown_view = HBox([self.flair_dropdown, self.add_button, self.copy_button])
+        self.preprocess_btn = SwitchButton("Preprocess", "Preprocess", Layout(width='100px'), 
+                                           self.preprocessor_on, self.preprocessor_off)
+        self.preprocess_btn.button.tooltip = f"Automatically subsitute {{{index + 1}}} for an element of this list in prompt"
+        self.subsitute_index = 0
+        self.subsitute_to_random = Checkbox(value=False, description="Random", indent=False)
+
+        self.dropdown_view = HBox([self.flair_dropdown, self.add_button, self.copy_button, 
+                                   self.preprocess_btn.render_element, self.subsitute_to_random])
         self.dropdown_view.layout.visibility = "hidden"
         self.dropdown_view.layout.height = "0px"
 
@@ -64,6 +73,28 @@ class FlairItem:
 
     def _ipython_display_(self):
         self.render()
+
+    def preprocessor_on(self):
+        self.ui.prompt_preprocessors.append(self)
+    
+    def preprocessor_off(self):
+        self.ui.prompt_preprocessors.remove(self)
+
+    def process(self, prompt:str):
+        #TODO guard index
+        item = self.__data[self.subsitute_index]
+        self.step_subsitute_index()
+        return prompt.replace(f"{{{self.index + 1}}}", item)
+
+    def set_subsitute_index(self, index:int = 0):
+        self.subsitute_index = index
+    
+    def step_subsitute_index(self):
+        if self.subsitute_to_random.value:
+            self.subsitute_index = random.randint(0, len(self.__data))
+        else:
+            self.subsitute_index += 1
+            if self.subsitute_index >= len(self.__data): self.subsitute_index = 0
 
     def load_data(self, path:str):
         if os.path.isfile(path):

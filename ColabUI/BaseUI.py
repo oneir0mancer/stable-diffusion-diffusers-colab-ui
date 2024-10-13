@@ -19,6 +19,7 @@ class BaseUI:
         self.count_field = IntText(value=1, layout=Layout(width='150px'), description="Sample count ")
         self.clip_skip = None
         self.cfg_rescale = 0.0
+        self.prompt_preprocessors = []
         
     def render(self):
         """Render UI widgets."""
@@ -45,7 +46,18 @@ class BaseUI:
         meta = PngInfo()
         meta.add_text("Data", self._metadata + additional_data)
         image.save(path, pnginfo=meta)
-        
+
+    def get_positive_prompt(self):
+        return self.preprocess_prompt(self.positive_prompt.value)
+
+    def get_negative_prompt(self):
+        return self.preprocess_prompt(self.negative_prompt.value)
+
+    def preprocess_prompt(self, prompt : str):
+        for preprocessor in self.prompt_preprocessors:
+            prompt = preprocessor.process(prompt)
+        return prompt
+
     @property
     def metadata(self):
         return self._metadata

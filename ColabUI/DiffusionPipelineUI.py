@@ -16,7 +16,7 @@ class DiffusionPipelineUI(BaseUI):
         g = torch.cuda.manual_seed(seed)
         self._metadata = self.get_metadata_string() + f"Seed: {seed} "
 
-        results = pipe(prompt=self.positive_prompt.value, 
+        results = pipe(prompt=self.get_positive_prompt(), 
                        negative_prompt=self.negative_prompt.value, 
                        num_inference_steps=self.steps_field.value,
                        num_images_per_prompt = self.batch_field.value,

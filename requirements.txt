@@ -1,7 +1,7 @@
-torch==2.4.1
-xformers==0.0.28.post1
+torch
+xformers
 accelerate
-diffusers==0.30.3
+diffusers
 omegaconf
 peft
 pytorch-lightning

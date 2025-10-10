@@ -2,9 +2,9 @@ torch==2.5.1
 torchvision==0.20.1
 xformers
 accelerate
-diffusers
+diffusers==0.34.0
 omegaconf
 peft
 pytorch-lightning
 safetensors
-transformers
+transformers==4.56.0

@@ -4,6 +4,7 @@ import torch
 import numpy as np
 from ipywidgets import Text, FloatSlider, HBox, VBox, Button, Accordion
 from PIL import Image
+from sd_embed.embedding_funcs import get_weighted_text_embeddings_sdxl
 from .CanvasHolder import CanvasHolder
 
 #TODO can blur: https://huggingface.co/docs/diffusers/using-diffusers/inpaint
@@ -51,10 +52,22 @@ class InpaintRefinerUI:
         g = torch.cuda.manual_seed(seed)
         self._metadata = self.__base_ui.get_metadata_string() + f"\nImg2Img Seed: {seed}, Noise Strength: {self.strength_field.value} "
         
+        #TODO see that method used is dependant on model type. For now only SDXL is used.
+        (
+            prompt_embeds, prompt_neg_embeds, 
+            pooled_prompt_embeds, negative_pooled_prompt_embeds
+        ) = get_weighted_text_embeddings_sdxl(
+            pipe, 
+            prompt = self.__base_ui.get_positive_prompt(), 
+            neg_prompt = self.__base_ui.get_negative_prompt()
+        )
+        
         results = pipe(image=init_image,
                        mask_image=mask,
-                       prompt=self.__base_ui.positive_prompt.value, 
-                       negative_prompt=self.__base_ui.negative_prompt.value, 
+                       prompt_embeds = prompt_embeds, 
+                       negative_prompt_embeds = prompt_neg_embeds, 
+                       pooled_prompt_embeds = pooled_prompt_embeds, 
+                       negative_pooled_prompt_embeds = negative_pooled_prompt_embeds, 
                        num_inference_steps=self.__base_ui.steps_field.value,
                        num_images_per_prompt = self.__base_ui.batch_field.value,
                        guidance_scale=self.__base_ui.cfg_field.value, 
@@ -62,6 +75,8 @@ class InpaintRefinerUI:
                        strength=self.strength_field.value,
                        width=size[0], height=size[1],
                        generator=g)
+        
+        del prompt_embeds, prompt_neg_embeds, pooled_prompt_embeds, negative_pooled_prompt_embeds
         return results
 
     @property

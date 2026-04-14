@@ -1,0 +1,11 @@
+torch==2.9.0+cu126
+torchvision==0.24.0+cu126
+xformers
+accelerate
+diffusers==0.35.2
+omegaconf
+peft
+pytorch-lightning
+safetensors
+transformers==4.57.1
+git+https://github.com/xhinker/sd_embed.git@main

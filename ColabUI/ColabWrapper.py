@@ -2,6 +2,7 @@ import os
 import torch
 from diffusers import EulerAncestralDiscreteScheduler, DPMSolverMultistepScheduler, UniPCMultistepScheduler
 from diffusers import AutoencoderKL
+from diffusers import AutoPipelineForImage2Image, AutoPipelineForInpainting
 from .FlairView import FlairView
 from .HugginfaceModelIndex import HugginfaceModelIndex
 from .LoraDownloader import LoraDownloader
@@ -41,6 +42,9 @@ class ColabWrapper:
             custom_pipeline=self.custom_pipeline,
             torch_dtype=torch.float16).to("cuda")
         self.pipe.safety_checker = None
+        
+        self.pipe.enable_model_cpu_offload()
+        # remove following line if xFormers is not installed or you have PyTorch 2.0 or higher installed
         self.pipe.enable_xformers_memory_efficient_attention()
 
     def load_vae(self, id_or_path: str, subfolder: str):
@@ -100,11 +104,18 @@ class ColabWrapper:
         
         return paths
 
-    #StableDiffusionXLImg2ImgPipeline
     def render_refiner_ui(self, pipeline_interface):
+    """Start img2img ui by providing interface for instantiating a pipeline. 
+    It must support being loaded from compinents, i.e. `pipeline_interface(**components)`.
+    """
         components = self.pipe.components
         self.img2img_pipe = pipeline_interface(**components)
+        self.refiner_ui = Img2ImgRefinerUI(self.ui)
+        self.refiner_ui.render()
         
+    def render_refiner_ui(self):
+    """Start img2img ui using default AutoPipelineForImage2Image, reusing txt2img components."""
+        self.img2img_pipe = AutoPipelineForImage2Image.from_pipe(self.pipe)
         self.refiner_ui = Img2ImgRefinerUI(self.ui)
         self.refiner_ui.render()
 
@@ -124,9 +135,17 @@ class ColabWrapper:
         return paths
 
     def render_inpaint_ui(self, pipeline_interface, ui):
+    """Start inpaint ui by providing interface for instantiating a pipeline. 
+    It must support being loaded from compinents, i.e. `pipeline_interface(**components)`.
+    """
         components = self.pipe.components
         self.inpaint_pipe = pipeline_interface(**components)
-        
+        self.inpaint_ui = ui
+        self.inpaint_ui.render()
+
+    def render_inpaint_ui(self, ui):
+    """Start inpaint ui using default AutoPipelineForInpainting, reusing txt2img components."""
+        self.img2img_pipe = AutoPipelineForInpainting.from_pipe(self.pipe)
         self.inpaint_ui = ui
         self.inpaint_ui.render()
 

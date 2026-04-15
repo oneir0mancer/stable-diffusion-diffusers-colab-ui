@@ -43,9 +43,12 @@ class ColabWrapper:
             torch_dtype=torch.float16).to("cuda")
         self.pipe.safety_checker = None
         
-        self.pipe.enable_model_cpu_offload()
         # remove following line if xFormers is not installed or you have PyTorch 2.0 or higher installed
         self.pipe.enable_xformers_memory_efficient_attention()
+
+    def enable_model_cpu_offload(self):
+        #This eats up a lot of RAM and makes Colab linstance crash
+        self.pipe.enable_model_cpu_offload()
 
     def load_vae(self, id_or_path: str, subfolder: str):
         vae = AutoencoderKL.from_pretrained(id_or_path, subfolder=subfolder, torch_dtype=torch.float16).to("cuda")

@@ -105,16 +105,16 @@ class ColabWrapper:
         return paths
 
     def render_refiner_ui(self, pipeline_interface):
-    """Start img2img ui by providing interface for instantiating a pipeline. 
-    It must support being loaded from compinents, i.e. `pipeline_interface(**components)`.
-    """
+        """Start img2img ui by providing interface for instantiating a pipeline. 
+        It must support being loaded from compinents, i.e. `pipeline_interface(**components)`.
+        """
         components = self.pipe.components
         self.img2img_pipe = pipeline_interface(**components)
         self.refiner_ui = Img2ImgRefinerUI(self.ui)
         self.refiner_ui.render()
         
     def render_refiner_ui(self):
-    """Start img2img ui using default AutoPipelineForImage2Image, reusing txt2img components."""
+        """Start img2img ui using default AutoPipelineForImage2Image, reusing txt2img components."""
         self.img2img_pipe = AutoPipelineForImage2Image.from_pipe(self.pipe)
         self.refiner_ui = Img2ImgRefinerUI(self.ui)
         self.refiner_ui.render()
@@ -135,16 +135,16 @@ class ColabWrapper:
         return paths
 
     def render_inpaint_ui(self, pipeline_interface, ui):
-    """Start inpaint ui by providing interface for instantiating a pipeline. 
-    It must support being loaded from compinents, i.e. `pipeline_interface(**components)`.
-    """
+        """Start inpaint ui by providing interface for instantiating a pipeline. 
+        It must support being loaded from compinents, i.e. `pipeline_interface(**components)`.
+        """
         components = self.pipe.components
         self.inpaint_pipe = pipeline_interface(**components)
         self.inpaint_ui = ui
         self.inpaint_ui.render()
 
     def render_inpaint_ui(self, ui):
-    """Start inpaint ui using default AutoPipelineForInpainting, reusing txt2img components."""
+        """Start inpaint ui using default AutoPipelineForInpainting, reusing txt2img components."""
         self.img2img_pipe = AutoPipelineForInpainting.from_pipe(self.pipe)
         self.inpaint_ui = ui
         self.inpaint_ui.render()

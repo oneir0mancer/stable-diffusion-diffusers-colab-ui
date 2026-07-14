@@ -31,7 +31,7 @@ class ColabWrapper:
         self.model_index = HugginfaceModelIndex(filepath)
         self.model_index.render()
 
-    def load_model(self, pipeline_interface, custom_pipeline:str = "lpw_stable_diffusion"):
+    def load_model(self, pipeline_interface, custom_pipeline:str = None):
         model_id, from_ckpt = self.model_index.get_model_id()
         loader_func = pipeline_interface.from_single_file if from_ckpt else pipeline_interface.from_pretrained
 
@@ -44,7 +44,7 @@ class ColabWrapper:
         self.pipe.safety_checker = None
         
         # remove following line if xFormers is not installed or you have PyTorch 2.0 or higher installed
-        self.pipe.enable_xformers_memory_efficient_attention()
+        #self.pipe.enable_xformers_memory_efficient_attention()
 
     def enable_model_cpu_offload(self):
         #This eats up a lot of RAM and makes Colab linstance crash

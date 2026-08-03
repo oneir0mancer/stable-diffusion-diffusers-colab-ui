@@ -1,5 +1,5 @@
 import torch
-from sd_embed.embedding_funcs import get_weighted_text_embeddings_sdxl
+from sd_embed.embedding_funcs import get_weighted_text_embeddings_sd15
 from .BaseUI import BaseUI
 
 class DiffusionPipelineUI(BaseUI):
@@ -17,11 +17,9 @@ class DiffusionPipelineUI(BaseUI):
         g = torch.cuda.manual_seed(seed)
         self._metadata = self.get_metadata_string() + f"Seed: {seed} "
         
-        #TODO see that method used is dependant on model type. For now only SDXL is used.
         (
             prompt_embeds, prompt_neg_embeds, 
-            pooled_prompt_embeds, negative_pooled_prompt_embeds
-        ) = get_weighted_text_embeddings_sdxl(
+        ) = get_weighted_text_embeddings_sd15(
             pipe, 
             prompt = self.get_positive_prompt(), 
             neg_prompt = self.get_negative_prompt()
@@ -29,8 +27,6 @@ class DiffusionPipelineUI(BaseUI):
 
         results = pipe(prompt_embeds = prompt_embeds, 
                        negative_prompt_embeds = prompt_neg_embeds, 
-                       pooled_prompt_embeds = pooled_prompt_embeds, 
-                       negative_pooled_prompt_embeds = negative_pooled_prompt_embeds, 
                        num_inference_steps=self.steps_field.value,
                        num_images_per_prompt = self.batch_field.value,
                        guidance_scale=self.cfg_field.value, 
@@ -38,5 +34,5 @@ class DiffusionPipelineUI(BaseUI):
                        generator=g, clip_skip=self.clip_skip,
                        height=self.height_field.value, width=self.width_field.value)
         
-        del prompt_embeds, prompt_neg_embeds, pooled_prompt_embeds, negative_pooled_prompt_embeds
+        del prompt_embeds, prompt_neg_embeds
         return results

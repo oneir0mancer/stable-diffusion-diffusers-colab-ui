@@ -6,7 +6,7 @@ import torch
 from IPython.display import display
 from ipywidgets import FloatSlider, Dropdown, HBox, VBox, Text, Button, Label
 from PIL import Image
-from sd_embed.embedding_funcs import get_weighted_text_embeddings_sdxl
+from sd_embed.embedding_funcs import get_weighted_text_embeddings_sd15
 from .BaseUI import BaseUI
 from ..utils.image_utils import load_image_metadata
 
@@ -73,8 +73,7 @@ class Img2ImgRefinerUI:
         #TODO see that method used is dependant on model type. For now only SDXL is used.
         (
             prompt_embeds, prompt_neg_embeds, 
-            pooled_prompt_embeds, negative_pooled_prompt_embeds
-        ) = get_weighted_text_embeddings_sdxl(
+        ) = get_weighted_text_embeddings_sd15(
             pipe, 
             prompt = self.__base_ui.get_positive_prompt(), 
             neg_prompt = self.__base_ui.get_negative_prompt()
@@ -83,8 +82,6 @@ class Img2ImgRefinerUI:
         results = pipe(image=init_image,
                        prompt_embeds = prompt_embeds, 
                        negative_prompt_embeds = prompt_neg_embeds, 
-                       pooled_prompt_embeds = pooled_prompt_embeds, 
-                       negative_pooled_prompt_embeds = negative_pooled_prompt_embeds,  
                        num_inference_steps=self.__base_ui.steps_field.value,
                        num_images_per_prompt = self.__base_ui.batch_field.value,
                        guidance_scale=self.__base_ui.cfg_field.value, 
@@ -93,7 +90,7 @@ class Img2ImgRefinerUI:
                        width=size[0], height=size[1],
                        generator=g)
         
-        del prompt_embeds, prompt_neg_embeds, pooled_prompt_embeds, negative_pooled_prompt_embeds
+        del prompt_embeds, prompt_neg_embeds
         return results
 
     @property
